@@ -16,11 +16,9 @@ class MySpentForm extends Component {
         };
 
         props.store.subscribe(() => {
-            console.log('form store state', this.props.store.getState());
             this.setState({
                 categories: props.store.getState().categories.map((c) => {return c.name})
             });
-            console.log('categories', this.state.categories);
         });
     }
     render() {

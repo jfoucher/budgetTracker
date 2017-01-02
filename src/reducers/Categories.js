@@ -5,14 +5,11 @@ const initialState = [];
 
 
 function Categories(state = initialState, action) {
-    console.log('categories reducer', state, action);
     switch (action.type) {
         case t.ADD_CATEGORY:
-            console.log('add category', state);
             const exists = state.find(doc => {
                 return doc.name && action.data.name && doc.name === action.data.name
             });
-            console.log('cat exists', exists);
             if(exists) {
                 //Category already exists
                 return state;
@@ -38,7 +35,6 @@ function Categories(state = initialState, action) {
                 doc._id !== action.data._id
             );
         case t.UPDATE_CATEGORY:
-            console.log('update category', state);
             if(state){
                 return state.map(doc => {
                         if (doc._id === action.data._id) {

@@ -59,15 +59,12 @@ const pouchMiddleware = PouchMiddleware([
         },
         actions: {
             remove: doc => {
-                console.log('remove category', doc)
                 return {type:types.REMOVE_CATEGORY, data: doc};
             },
             insert: doc => {
-                console.log('insert category', doc)
                 return {type:types.ADD_CATEGORY, data: doc};
             },
             update: doc => {
-                console.log('update category', doc)
                 return {type:types.UPDATE_CATEGORY, data: doc};
             }
         }
