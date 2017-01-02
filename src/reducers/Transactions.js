@@ -14,7 +14,8 @@ function Transactions(state = initialState, action) {
                     _id: action.data._id || guid(),
                     amount: action.data.amount,
                     date: action.data.date,
-                    category: action.data.category
+                    category: action.data.category,
+                    type: 'transaction'
                 }
                 if(action.data._rev) {
                     d._rev = action.data._rev
@@ -27,7 +28,8 @@ function Transactions(state = initialState, action) {
                 _id: action.data._id || guid(),
                 amount: action.data.amount,
                 date: action.data.date,
-                category: action.data.category
+                category: action.data.category,
+                type: 'transaction'
             }
             if(action.data._rev) {
                 e._rev = action.data._rev

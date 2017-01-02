@@ -5,6 +5,7 @@ import './App.css';
 import SpentForm from './components/SpentForm';
 import TransactionsTable from './components/TransactionsTable';
 import Transactions from './reducers/Transactions';
+import Categories from './reducers/Categories';
 import Login from './components/Login';
 import LoggedIn from './components/Logged';
 import { Provider } from 'react-redux';
@@ -12,7 +13,7 @@ import * as types from './constants/actionTypes'
 import PouchMiddleware from 'pouch-redux-middleware'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import PouchDB from 'pouchdb'
-import { reducer as formReducer } from 'redux-form'
+import { reducer as formReducer, reset } from 'redux-form'
 import thunk from 'redux-thunk';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {AppBar} from 'material-ui';
@@ -20,6 +21,7 @@ import {AppBar} from 'material-ui';
 //TODO make this configurable
 const db = new PouchDB('budget4');
 const remoteDB = new PouchDB('https://couchdb-d020c7.smileupps.com/budget4');
+
 db.sync(remoteDB, {
     live: true
 }).on('change', function (change) {
@@ -28,23 +30,52 @@ db.sync(remoteDB, {
     console.error('sync error', err);
 });
 
-const pouchMiddleware = PouchMiddleware({
-    path: '/transactions',
-    db: db,
-    actions: {
-        remove: doc => {
-            return {type:types.REMOVE, data: doc};
+const pouchMiddleware = PouchMiddleware([
+    {
+        path: '/transactions',
+        db: db,
+        changeFilter: (doc) => {
+            return !doc._deleted && doc.type && doc.type === 'transaction';
         },
-        insert: doc => {
-            return {type:types.ADD, data: doc};
+        actions: {
+            remove: doc => {
+                return {type:types.REMOVE, data: doc};
+            },
+            insert: doc => {
+                return {type:types.ADD, data: doc};
+            },
+            update: doc => {
+                return {type:types.UPDATE, data: doc};
+            }
+        }
+    },
+    {
+        path: '/categories',
+        db: db,
+        changeFilter: (doc) => {
+            console.log('filter', doc);
+            return !doc._deleted && doc.type && doc.type === 'category';
+            //doc.type && doc.type === 'category';
         },
-        update: doc => {
-            return {type:types.UPDATE, data: doc};
+        actions: {
+            remove: doc => {
+                console.log('remove category', doc)
+                return {type:types.REMOVE_CATEGORY, data: doc};
+            },
+            insert: doc => {
+                console.log('insert category', doc)
+                return {type:types.ADD_CATEGORY, data: doc};
+            },
+            update: doc => {
+                console.log('update category', doc)
+                return {type:types.UPDATE_CATEGORY, data: doc};
+            }
         }
     }
-});
+]);
 const reducers = {
     transactions: Transactions,
+    categories: Categories,
     form: formReducer
 };
 
@@ -58,7 +89,7 @@ const createStoreWithMiddleware = compose(
     applyMiddlewares
 )(createStore);
 
-const store = createStoreWithMiddleware(combineReducers(reducers), {transactions:[]});
+const store = createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: []});
 
 class App extends Component {
     constructor(props){
@@ -68,8 +99,10 @@ class App extends Component {
         }
     }
     dosubmit  = (a) => {
-        //TODO save categories here
+        store.dispatch( {type:types.ADD_CATEGORY, data: {name: a.category, type: "category"}});
+        store.dispatch(reset('transaction'));
         store.dispatch( {type:types.ADD, data: a});
+
     };
 
     render() {
@@ -82,7 +115,7 @@ class App extends Component {
                             iconElementRight={this.state.logged ? <LoggedIn /> : <Login />}
                             />
                         <div className="App-form">
-                            <SpentForm onSubmit={this.dosubmit} />
+                            <SpentForm onSubmit={this.dosubmit} store={store} />
                         </div>
                         <div className="table">
                             <TransactionsTable store={store} />
