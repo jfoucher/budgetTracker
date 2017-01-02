@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 import './App.css';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+import ReactGridLayout from 'react-grid-layout';
 import SpentForm from './components/SpentForm';
 import TransactionsTable from './components/TransactionsTable';
 import Transactions from './reducers/Transactions';
@@ -13,22 +16,58 @@ import * as types from './constants/actionTypes'
 import PouchMiddleware from 'pouch-redux-middleware'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import PouchDB from 'pouchdb'
+
 import { reducer as formReducer, reset } from 'redux-form'
 import thunk from 'redux-thunk';
+import { deepOrange500, deepOrange700,
+    teal600,
+    grey100, grey300, grey400, grey500,
+    white, darkBlack, fullBlack,} from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {AppBar} from 'material-ui';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {AppBar,Drawer, MenuItem} from 'material-ui';
+import {fade} from 'material-ui/utils/colorManipulator';
+import {ContentAdd} from 'material-ui/svg-icons';
 
-//TODO make this configurable
-const db = new PouchDB('budget4');
-const remoteDB = new PouchDB('https://couchdb-d020c7.smileupps.com/budget4');
+const muiTheme = getMuiTheme({
+    palette: {
+        primary1Color: deepOrange500,
+        primary2Color: deepOrange700,
+        primary3Color: grey400,
+        accent1Color: teal600,
+        accent2Color: grey100,
+        accent3Color: grey500,
+        textColor: darkBlack,
+        alternateTextColor: white,
+        canvasColor: white,
+        borderColor: grey300,
+        disabledColor: fade(darkBlack, 0.3),
+        pickerHeaderColor: deepOrange500,
+        clockCircleColor: fade(darkBlack, 0.07),
+        shadowColor: fullBlack,
+    },
+    appBar: {
+        height: 65,
+    },
+});
+
+PouchDB.plugin(require('pouchdb-authentication'));
+
+//TODO the local database can have any name
+const db = new PouchDB('budgetTracker');
+
+//TODO only do this if the user is authenticated
+const remoteDB = new PouchDB('https://couchdb-d020c7.smileupps.com/budget4', {skipSetup: true});
 
 db.sync(remoteDB, {
-    live: true
+    live: true,
+    retry: true
 }).on('change', function (change) {
     console.log('change sync', change);
 }).on('error', function (err) {
     console.error('sync error', err);
 });
+//</TODO>
 
 const pouchMiddleware = PouchMiddleware([
     {
@@ -92,7 +131,8 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            logged: false
+            logged: true,
+            open:false
         }
     }
     dosubmit  = (a) => {
@@ -102,21 +142,35 @@ class App extends Component {
 
     };
 
+    //TODO submit to store, reduce transactions to various months, save in state, and display in drawaers
+
     render() {
+
         return (
             <Provider store={store}>
-                <MuiThemeProvider>
+                <MuiThemeProvider muiTheme={muiTheme}>
                     <div className="App">
                         <AppBar
+                            onLeftIconButtonTouchTap={()=>{
+                           this.setState({open:!this.state.open})
+                            }}
+
                             title="Budget"
                             iconElementRight={this.state.logged ? <LoggedIn /> : <Login />}
                             />
-                        <div className="App-form">
-                            <SpentForm onSubmit={this.dosubmit} store={store} />
-                        </div>
-                        <div className="table">
-                            <TransactionsTable store={store} />
-                        </div>
+                        <Drawer open={this.state.open}>
+                            <AppBar title="Budget" onLeftIconButtonTouchTap={()=>{
+                           this.setState({open:!this.state.open})
+                            }}/>
+                            <MenuItem>Menu Item</MenuItem>
+                            <MenuItem>Menu Item 2</MenuItem>
+                        </Drawer>
+                        <ReactGridLayout className="layout" cols={12} rowHeight={30} width={1200}>
+                            <div className="table" key="b" data-grid={{x: 0, y: 0, w: 16, h: 2, minW: 2, maxW: 16}}>
+                                <TransactionsTable store={store} />
+                            </div>
+                        </ReactGridLayout>
+                        <SpentForm onSubmit={this.dosubmit} store={store} />
                     </div>
                 </MuiThemeProvider>
             </Provider>

@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import './SpentForm.css';
-import {RaisedButton, Paper, Divider} from 'material-ui';
+import {RaisedButton, Paper, Divider, FlatButton, Dialog, FloatingActionButton} from 'material-ui';
 import { Field, reduxForm } from 'redux-form';
 import {
     TextField,
     DatePicker,
     AutoComplete,
 } from 'redux-form-material-ui'
+import {ContentAdd} from 'material-ui/svg-icons';
+
 
 class MySpentForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            categories: []
+            categories: [],
+            open: false
         };
 
         props.store.subscribe(() => {
@@ -21,10 +24,43 @@ class MySpentForm extends Component {
             });
         });
     }
+    handleClose = () => {
+        this.setState({open:!this.state.open});
+    }
+    sendSubmit = () => {
+        console.log('props', this.props)
+        this.props.submit();
+        this.setState({open:!this.state.open});
+    }
     render() {
+
+        const actions = [
+            <FlatButton
+                label="Cancel"
+                primary={true}
+                onTouchTap={this.handleClose}
+                />,
+            <FlatButton
+                label="Submit"
+                primary={true}
+                keyboardFocused={true}
+                onTouchTap={this.sendSubmit}
+                />,
+        ];
+
         const { handleSubmit } = this.props;
+        const style= {
+            position: "fixed",
+            bottom: "40px",
+            right: "40px",
+        }
         return (
-            <Paper zDepth={2}>
+        <div>
+            <Dialog title="Dialog With Actions"
+                actions={actions}
+                modal={false}
+                open={this.state.open}
+                onRequestClose={this.handleClose}>
                 <form onSubmit={handleSubmit}>
                     <Field
                         name="amount"
@@ -55,10 +91,14 @@ class MySpentForm extends Component {
                         dataSource={this.state.categories}
                         />
                     <Divider />
-                    <RaisedButton type="submit" label="Save"/>
 
                 </form>
-            </Paper>
+
+            </Dialog>
+            <FloatingActionButton style={style}>
+                <ContentAdd onTouchTap={this.handleClose}/>
+            </FloatingActionButton>
+        </div>
         );
     }
 }

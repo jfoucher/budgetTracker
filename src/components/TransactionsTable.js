@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import IconButton from 'material-ui/IconButton';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import * as types from '../constants/actionTypes'
+
 
 class TransactionsTable extends Component {
     constructor(props) {
@@ -15,6 +19,11 @@ class TransactionsTable extends Component {
         });
     }
 
+    deleteTransaction(doc) {
+        console.log('delete transaction', doc);
+        this.props.store.dispatch({type:types.REMOVE, data: doc})
+    }
+
     render() {
         let rows = [];
         for(var i = 0;i < this.state.transactions.length;i++) {
@@ -28,6 +37,11 @@ class TransactionsTable extends Component {
                     <TableRowColumn>{date}</TableRowColumn>
                     <TableRowColumn>{t.amount}</TableRowColumn>
                     <TableRowColumn>{t.category}</TableRowColumn>
+                    <TableRowColumn>
+                        <IconButton tooltip="Delete Transaction" onTouchTap={this.deleteTransaction.bind(this, t)}>
+                            <ActionDelete />
+                        </IconButton>
+                    </TableRowColumn>
                 </TableRow>
             )
         }
@@ -39,6 +53,7 @@ class TransactionsTable extends Component {
                     <TableHeaderColumn>Date</TableHeaderColumn>
                     <TableHeaderColumn>Amount</TableHeaderColumn>
                     <TableHeaderColumn>Category</TableHeaderColumn>
+                    <TableHeaderColumn></TableHeaderColumn>
                 </TableRow>
             </TableHeader>
             <TableBody displayRowCheckbox={false}>
