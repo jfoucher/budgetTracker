@@ -39,7 +39,7 @@ class LoggedIn extends Component {
             <div>
                 <RaisedButton
                     onTouchTap={this.handleTouchTap}
-                    label="Welcome Jonathan"
+                    label={"Welcome "+this.props.user.fullname}
                     primary={true}
                     />
                 <Popover
