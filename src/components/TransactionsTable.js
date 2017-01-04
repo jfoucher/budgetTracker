@@ -8,15 +8,14 @@ import * as types from '../constants/actionTypes'
 class TransactionsTable extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            transactions: []
-        };
-
-        props.store.subscribe(() => {
-            this.setState({
-                transactions: props.store.getState().transactions
-            });
-        });
+        //this.state = {
+        //    transactions: []
+        //}
+        //props.store.subscribe(() => {
+        //    this.setState({
+        //        transactions: props.store.getState().transactions
+        //    });
+        //});
     }
 
     deleteTransaction(doc) {
@@ -26,25 +25,34 @@ class TransactionsTable extends Component {
 
     render() {
         let rows = [];
-        for(var i = 0;i < this.state.transactions.length;i++) {
-            var t = this.state.transactions[i];
-            let date = '';
-            if(t.date) {
-                date = t.date.toString()
+        if(!this.props.transactions) {
+            rows.push(<TableRow key="empty" selectable={false}>
+                <TableRowColumn style={{textAlign:"center"}}>No transaction yet
+                </TableRowColumn>
+            </TableRow>);
+        } else {
+            for(var i = 0;i < this.props.transactions.length;i++) {
+                var t = this.props.transactions[i];
+                let date = '';
+                if(t.date) {
+                    date = t.date.toString()
+                }
+                rows.push(
+                    <TableRow key={t._id} selectable={false}>
+                        <TableRowColumn>{date}</TableRowColumn>
+                        <TableRowColumn>{t.amount}</TableRowColumn>
+                        <TableRowColumn>{t.category}</TableRowColumn>
+                        <TableRowColumn>
+                            <IconButton tooltip="Delete Transaction" onTouchTap={this.deleteTransaction.bind(this, t)}>
+                                <ActionDelete />
+                            </IconButton>
+                        </TableRowColumn>
+                    </TableRow>
+                )
             }
-            rows.push(
-                <TableRow key={t._id} selectable={false}>
-                    <TableRowColumn>{date}</TableRowColumn>
-                    <TableRowColumn>{t.amount}</TableRowColumn>
-                    <TableRowColumn>{t.category}</TableRowColumn>
-                    <TableRowColumn>
-                        <IconButton tooltip="Delete Transaction" onTouchTap={this.deleteTransaction.bind(this, t)}>
-                            <ActionDelete />
-                        </IconButton>
-                    </TableRowColumn>
-                </TableRow>
-            )
         }
+
+
         return (
 
         <Table>

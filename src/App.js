@@ -10,7 +10,7 @@ import TitleBar from './components/TitleBar';
 import TransactionsTable from './components/TransactionsTable';
 import Transactions from './reducers/Transactions';
 import Categories from './reducers/Categories';
-
+import md5 from 'md5';
 import { Provider } from 'react-redux';
 import * as types from './constants/actionTypes'
 import PouchMiddleware from 'pouch-redux-middleware'
@@ -19,8 +19,8 @@ import PouchDB from 'pouchdb'
 
 import { reducer as formReducer, reset } from 'redux-form'
 import thunk from 'redux-thunk';
-import { deepOrange500, deepOrange700,
-    green500,
+import { teal500, teal700,
+    orange500,
     grey100, grey300, grey400, grey500,
     white, darkBlack, fullBlack,} from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -35,10 +35,10 @@ import {ContentAdd} from 'material-ui/svg-icons';
 
 const muiTheme = getMuiTheme({
     palette: {
-        primary1Color: deepOrange500,
-        primary2Color: deepOrange700,
+        primary1Color: teal500,
+        primary2Color: teal700,
         primary3Color: grey400,
-        accent1Color: green500,
+        accent1Color: orange500,
         accent2Color: grey100,
         accent3Color: grey500,
         textColor: darkBlack,
@@ -46,12 +46,12 @@ const muiTheme = getMuiTheme({
         canvasColor: white,
         borderColor: grey300,
         disabledColor: fade(darkBlack, 0.3),
-        pickerHeaderColor: deepOrange500,
+        pickerHeaderColor: teal500,
         clockCircleColor: fade(darkBlack, 0.07),
         shadowColor: fullBlack,
     },
     appBar: {
-        height: 65,
+        height: 55,
     },
 });
 
@@ -86,7 +86,7 @@ const pouchMiddleware = PouchMiddleware([
         path: '/categories',
         db: db,
         changeFilter: (doc) => {
-            console.log('filter', doc);
+            //console.log('filter', doc);
             return !doc._deleted && doc.type && doc.type === 'category';
             //doc.type && doc.type === 'category';
         },
@@ -125,10 +125,61 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            logged: false,
-            open: false
+            open: false,
+            months: [],
+            currentMonth: new Date().getFullYear() + '-' + (new Date().getMonth() + 1),
+            menuItems: []
         }
+
+
+
+        //TODO reduce transactions to save them by month
+        store.subscribe(() => {
+            var months = {};
+            const trs = store.getState().transactions;
+            trs.forEach((tr) => {
+                const d = new Date(tr.date);
+                var month = d.getFullYear() +'-'+(1+d.getMonth());
+                if(typeof months[month] === 'undefined') {
+                    months[month] = [];
+                    months[month].push(tr);
+                } else {
+                    months[month].push(tr);
+                }
+            });
+            this.setState({months: months});
+            //console.log('MONTHS', months);
+            var menuItems = [];
+
+            for(var month in this.state.months) {
+                if( this.state.months.hasOwnProperty( month ) ) {
+
+                    var d = new Date();
+                    d.setFullYear(parseInt(month.substr(0,4)));
+                    d.setMonth(parseInt(month.substr(5)) - 1);
+                    d.setUTCDate(1);
+                    var m = d.getUTCMonth();
+                    m = m + 1;
+                    if(m < 10) {
+                        m='0'+m
+                    }
+                    const ms = this.state.months[month];
+
+                    menuItems.push(<MenuItem key={month} onTouchTap={this.changeMonth.bind(this, month)}>{m +'/'+ d.getFullYear() + ' ('+(ms.length)+' transactions)'}</MenuItem>)
+                }
+
+            }
+            this.setState({menuItems: menuItems});
+        });
+
+
     }
+
+    changeMonth (month)  {
+        console.log('changing month to ', month);
+        this.setState({currentMonth:month, open: !this.state.open})
+    }
+
     dosubmit  = (a) => {
         store.dispatch( {type:types.ADD_CATEGORY, data: {name: a.category, type: "category"}});
         store.dispatch(reset('transaction'));
@@ -137,25 +188,29 @@ class App extends Component {
 
 
     //TODO submit to store, reduce transactions to various months, save in state, and display in drawaers
+    componentDidMount () {
+        console.log('************App did mount*****************');
+
+
+
+    }
 
     render() {
-
         return (
             <Provider store={store}>
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <div className="App">
-                        <TitleBar logged={this.state.logged} db={db} />
+                        <TitleBar db={db} store={store} onDrawerOpen={()=>{this.setState({open:!this.state.open})}}/>
 
                         <Drawer open={this.state.open}>
                             <AppBar title="Budget" onLeftIconButtonTouchTap={()=>{
-                           this.setState({open:!this.state.open})
+                             this.setState({open:!this.state.open})
                             }}/>
-                            <MenuItem>Menu Item</MenuItem>
-                            <MenuItem>Menu Item 2</MenuItem>
+                            {this.state.menuItems}
                         </Drawer>
                         <ReactGridLayout className="layout" cols={12} rowHeight={30} width={1200}>
                             <div className="table" key="b" data-grid={{x: 0, y: 0, w: 16, h: 2, minW: 2, maxW: 16}}>
-                                <TransactionsTable store={store} />
+                                <TransactionsTable store={store} transactions={this.state.months[this.state.currentMonth]}/>
                             </div>
                         </ReactGridLayout>
                         <SpentForm onSubmit={this.dosubmit} store={store} />
