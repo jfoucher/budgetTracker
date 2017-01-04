@@ -26,15 +26,18 @@ class SignupForm extends Component {
         this.setState({open:!this.state.open});
 
         var signup = this.props.handleSubmit();
-        console.log('form submitted', signup);
-        signup.then(() => {
+        signup.then((u) => {
             this.setState({
                 snackbarMessage: 'Welcome',
                 snackbarOpen: true
             });
         }).catch((e) => {
+            var msg = 'Could not create your account, sorry. Are you online?';
+            if(e.status == 409) {
+                msg = 'This account already exists, try logging in';
+            }
             this.setState({
-            snackbarMessage: 'Could not create your account, sorry. Are you online?',
+            snackbarMessage: msg,
                 snackbarOpen: true
             });
         })
@@ -57,7 +60,7 @@ class SignupForm extends Component {
         const  { handleSubmit } = this.props
         return (
             <div>
-                <RaisedButton primary={true} label="Register" onTouchTap={this.handleClose} />
+                <RaisedButton secondary={true} label="Register" onTouchTap={this.handleClose} />
                 <Dialog title="Register to sync and backup your data"
                         actions={actions}
                         modal={false}
@@ -65,12 +68,22 @@ class SignupForm extends Component {
                         onRequestClose={this.handleClose}>
                     <form onSubmit={handleSubmit}>
                         <Field
+                            name="name"
+                            component={TextField}
+                            underlineShow={false}
+                            hintText="Name"
+                            floatingLabelText="Name"
+
+                            />
+
+                        <Divider />
+                        <Field
                             name="email"
                             component={TextField}
                             underlineShow={false}
                             hintText="Email"
                             floatingLabelText="Email"
-
+                            type="email"
                             />
 
                         <Divider />
