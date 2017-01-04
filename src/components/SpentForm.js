@@ -15,7 +15,8 @@ class MySpentForm extends Component {
         super(props);
         this.state = {
             categories: [],
-            open: false
+            open: false,
+
         };
 
         props.store.subscribe(() => {
@@ -25,6 +26,7 @@ class MySpentForm extends Component {
         });
     }
     handleClose = () => {
+        console.log('togggle open/close')
         this.setState({open:!this.state.open});
     }
     sendSubmit = () => {
@@ -95,9 +97,10 @@ class MySpentForm extends Component {
                 </form>
 
             </Dialog>
-            <FloatingActionButton style={style}>
-                <ContentAdd onTouchTap={this.handleClose}/>
+            <FloatingActionButton style={style} secondary={true} onTouchTap={this.handleClose} >
+                <ContentAdd/>
             </FloatingActionButton>
+
         </div>
         );
     }

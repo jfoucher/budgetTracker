@@ -29,6 +29,8 @@ class LoggedIn extends Component {
         });
     };
 
+
+
     render() {
         //return(<FlatButton {...this.props} label="Logged" />);
         const url = 'https://www.gravatar.com/avatar/'+md5('jfoucher@gmail.com'.toLowerCase())+'.jpg?s=100';
@@ -51,9 +53,10 @@ class LoggedIn extends Component {
                         <MenuItem primaryText="Refresh" />
                         <MenuItem primaryText="Help &amp; feedback" />
                         <MenuItem primaryText="Settings" />
-                        <MenuItem primaryText="Sign out" />
+                        <MenuItem primaryText="Sign out" onTouchTap={this.props.onLogout}/>
                     </Menu>
                 </Popover>
+
             </div>
         );
     }

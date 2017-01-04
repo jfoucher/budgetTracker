@@ -6,11 +6,11 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import ReactGridLayout from 'react-grid-layout';
 import SpentForm from './components/SpentForm';
+import TitleBar from './components/TitleBar';
 import TransactionsTable from './components/TransactionsTable';
 import Transactions from './reducers/Transactions';
 import Categories from './reducers/Categories';
-import Login from './components/Login';
-import LoggedIn from './components/Logged';
+
 import { Provider } from 'react-redux';
 import * as types from './constants/actionTypes'
 import PouchMiddleware from 'pouch-redux-middleware'
@@ -20,12 +20,16 @@ import PouchDB from 'pouchdb'
 import { reducer as formReducer, reset } from 'redux-form'
 import thunk from 'redux-thunk';
 import { deepOrange500, deepOrange700,
-    teal600,
+    green500,
     grey100, grey300, grey400, grey500,
     white, darkBlack, fullBlack,} from 'material-ui/styles/colors';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {AppBar,Drawer, MenuItem} from 'material-ui';
+import {
+    Drawer,
+    AppBar,
+    MenuItem
+} from 'material-ui';
 import {fade} from 'material-ui/utils/colorManipulator';
 import {ContentAdd} from 'material-ui/svg-icons';
 
@@ -34,7 +38,7 @@ const muiTheme = getMuiTheme({
         primary1Color: deepOrange500,
         primary2Color: deepOrange700,
         primary3Color: grey400,
-        accent1Color: teal600,
+        accent1Color: green500,
         accent2Color: grey100,
         accent3Color: grey500,
         textColor: darkBlack,
@@ -56,18 +60,8 @@ PouchDB.plugin(require('pouchdb-authentication'));
 //TODO the local database can have any name
 const db = new PouchDB('budgetTracker');
 
-//TODO only do this if the user is authenticated
-const remoteDB = new PouchDB('https://couchdb-d020c7.smileupps.com/budget4', {skipSetup: true});
 
-db.sync(remoteDB, {
-    live: true,
-    retry: true
-}).on('change', function (change) {
-    console.log('change sync', change);
-}).on('error', function (err) {
-    console.error('sync error', err);
-});
-//</TODO>
+
 
 const pouchMiddleware = PouchMiddleware([
     {
@@ -131,16 +125,16 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            logged: true,
-            open:false
+            logged: false,
+            open: false
         }
     }
     dosubmit  = (a) => {
         store.dispatch( {type:types.ADD_CATEGORY, data: {name: a.category, type: "category"}});
         store.dispatch(reset('transaction'));
         store.dispatch( {type:types.ADD, data: a});
-
     };
+
 
     //TODO submit to store, reduce transactions to various months, save in state, and display in drawaers
 
@@ -150,14 +144,8 @@ class App extends Component {
             <Provider store={store}>
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <div className="App">
-                        <AppBar
-                            onLeftIconButtonTouchTap={()=>{
-                           this.setState({open:!this.state.open})
-                            }}
+                        <TitleBar logged={this.state.logged} db={db} />
 
-                            title="Budget"
-                            iconElementRight={this.state.logged ? <LoggedIn /> : <Login />}
-                            />
                         <Drawer open={this.state.open}>
                             <AppBar title="Budget" onLeftIconButtonTouchTap={()=>{
                            this.setState({open:!this.state.open})

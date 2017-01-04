@@ -7,7 +7,7 @@ import {
     AutoComplete,
 } from 'redux-form-material-ui'
 
-class LoginForm extends Component {
+class SignupForm extends Component {
     static muiName = 'FlatButton';
 
     constructor(props) {
@@ -25,16 +25,16 @@ class LoginForm extends Component {
     sendSubmit = () => {
         this.setState({open:!this.state.open});
 
-        var login = this.props.handleSubmit();
-        console.log('form submitted', login);
-        login.then(() => {
+        var signup = this.props.handleSubmit();
+        console.log('form submitted', signup);
+        signup.then(() => {
             this.setState({
                 snackbarMessage: 'Welcome',
                 snackbarOpen: true
             });
         }).catch((e) => {
             this.setState({
-                snackbarMessage: 'Could not log you in, sorry. Check your credentials or sign up',
+            snackbarMessage: 'Could not create your account, sorry. Are you online?',
                 snackbarOpen: true
             });
         })
@@ -48,7 +48,7 @@ class LoginForm extends Component {
                 onTouchTap={this.handleClose}
                 />,
             <FlatButton
-                label="Submit"
+                label="Register"
                 primary={true}
                 keyboardFocused={true}
                 onTouchTap={this.sendSubmit}
@@ -57,8 +57,8 @@ class LoginForm extends Component {
         const  { handleSubmit } = this.props
         return (
             <div>
-                <RaisedButton primary={true} label="Login" onTouchTap={this.handleClose} />
-                <Dialog title="Login to sync"
+                <RaisedButton primary={true} label="Register" onTouchTap={this.handleClose} />
+                <Dialog title="Register to sync and backup your data"
                         actions={actions}
                         modal={false}
                         open={this.state.open}
@@ -98,8 +98,8 @@ class LoginForm extends Component {
         );
     }
 }
-const Login = reduxForm({
-    form: 'login'
-})(LoginForm);
+const Signup = reduxForm({
+    form: 'signup'
+})(SignupForm);
 
-export default Login;
+export default Signup;
