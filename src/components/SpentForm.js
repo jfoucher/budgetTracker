@@ -58,7 +58,7 @@ class MySpentForm extends Component {
         }
         return (
         <div>
-            <Dialog title="Dialog With Actions"
+            <Dialog title="Add a transaction"
                 actions={actions}
                 modal={false}
                 open={this.state.open}
