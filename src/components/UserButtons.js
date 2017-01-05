@@ -42,8 +42,13 @@ class UserButtons extends Component {
             console.log('current user is ', user);
             //Check if we can connect to our database.
             const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
-            this.setState({user:user.data, remoteDB: remoteDB});
-            this.setupSync(remoteDB);
+            remoteDB.get('currentUser').then((user)=>{
+                console.log('got remote current user', user)
+                this.setState({user:user.data, remoteDB: remoteDB});
+                this.setupSync(remoteDB);
+            }).catch((e)=>{
+                console.log('not logged in', e)
+            })
 
         });
     }
