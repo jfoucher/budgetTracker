@@ -65,6 +65,7 @@ class App extends Component {
             dbError: false
         }
 
+        //TODO I don't like this, find another way to do it
         this.props.store.subscribe(() => {
             var months = {};
             const trs = this.props.store.getState().transactions;

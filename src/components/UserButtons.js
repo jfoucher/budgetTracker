@@ -41,13 +41,14 @@ class UserButtons extends Component {
         this.props.db.get('currentUser').then((user) => {
             console.log('current user is ', user);
             //Check if we can connect to our database.
+            console.log('trying to access this database : ','https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
             const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
             remoteDB.get('currentUser').then((user)=>{
-                console.log('got remote current user', user)
+                console.log('got remote current user', user);
                 this.setState({user:user.data, remoteDB: remoteDB});
                 this.setupSync(remoteDB);
-            }).catch((e)=>{
-                console.log('not logged in', e)
+            }).catch((e, r)=>{
+                console.log('not logged in', e, r)
             })
 
         });
@@ -89,15 +90,35 @@ class UserButtons extends Component {
         var loginPromise = remoteDB.login(a.email, a.password, ajaxOpts);
         const db = this.props.db;
 
-        loginPromise.then(function (arg1, arg2, arg3) {
-            console.log("logged in", arg1, arg2, arg3);
+        loginPromise.then(function (loginResult) {
+
             remoteDB.getUser(a.email).then((u) => {
                 console.log('USER is ',u);
                 _this.setState({user: u});
-                db.put({
-                    _id: 'currentUser',
-                    data: u
-                });
+                db.get('currentUser').then((currentUser) => {
+                    console.log('got current user from local db', currentUser);
+                    //Modify it
+                    u._rev = currentUser._rev;
+                    db.put({
+                        _id: 'currentUser',
+                        data: u
+                    }).then((newUser) => {
+                        console.log('user updated from ', currentUser, 'to', newUser);
+                    }).catch((putUserError) => {
+                        console.log('could not update local user', putUserError);
+                    });
+                }).catch((localUserError) => {
+                    console.log('could not get local user', localUserError);
+                    db.put({
+                        _id: 'currentUser',
+                        data: u
+                    }).then((newUser) => {
+                        console.log('local user created', newUser);
+                    }).catch((putUserError) => {
+                        console.log('could not update local user', putUserError);
+                    });
+                })
+
             });
             //only do this if the user is authenticated
             _this.setupSync(remoteDB);
