@@ -12,7 +12,8 @@ import {
     IconButton,
     RaisedButton,
     FlatButton,
-    FontIcon
+    FontIcon,
+
 } from 'material-ui';
 import PouchDB from 'pouchdb'
 import muiThemeable from 'material-ui/styles/muiThemeable';
@@ -37,7 +38,6 @@ class TitleBar extends Component {
             console.log('current user is ', user);
             //Check if we can connect to our database.
             const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
-            console.log(remoteDB);
             this.setState({user:user.data, remoteDB: remoteDB});
             this.setupSync(remoteDB);
 
@@ -145,10 +145,12 @@ class TitleBar extends Component {
 
             <Toolbar style={{backgroundColor: this.props.muiTheme.palette.primary1Color}}>
                 <ToolbarGroup>
+
                     <IconButton onTouchTap={this.props.onDrawerOpen}>
                         <NavigationMenu color={this.props.muiTheme.palette.alternateTextColor}/>
                     </IconButton>
-                    <ToolbarTitle  style={{color: this.props.muiTheme.palette.alternateTextColor}} text="Budget" />
+                    <img src="logo.png" height="35" style={{margin:"0 .8em"}} />
+                    <ToolbarTitle  style={{color: this.props.muiTheme.palette.alternateTextColor,fontSize:"1.8em",lineHeight:"1.6em"}} text="Budgt" />
                 </ToolbarGroup>
                 <ToolbarGroup>
                     <ToolbarSeparator />
