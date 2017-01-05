@@ -27,8 +27,9 @@ class SignupForm extends Component {
 
         var signup = this.props.handleSubmit();
         signup.then((u) => {
+            console.log("signup done", u);
             this.setState({
-                snackbarMessage: 'Welcome',
+                snackbarMessage: 'Account successfully created',
                 snackbarOpen: true
             });
         }).catch((e) => {

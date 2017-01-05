@@ -16,22 +16,26 @@ import {
 
 } from 'material-ui';
 import PouchDB from 'pouchdb'
-import muiThemeable from 'material-ui/styles/muiThemeable';
-import UserButtons from './UserButtons';
+import Signup from './Signup';
+import Login from './Login';
+import LoggedIn from './Logged';
 import {NavigationExpandMoreIcon, NavigationMenu} from 'material-ui/svg-icons';
 import md5 from 'md5'
 import {Visible, Hidden} from 'react-grid-system'
 
 
-class TitleBar extends Component {
+class UserButtons extends Component {
     constructor(props) {
         super(props)
         this.state = {
             value:1,
             logged:false,
             remoteDB: false,
-            user:false
+            user:false,
+            sep:''
         }
+
+
 
         //Check if we're logged in
         this.props.db.get('currentUser').then((user) => {
@@ -42,6 +46,12 @@ class TitleBar extends Component {
             this.setupSync(remoteDB);
 
         });
+    }
+
+    componentDidMount() {
+        if(this.props.sep) {
+            this.setState({sep: this.props.sep});
+        }
     }
 
     setupSync(remoteDB){
@@ -137,30 +147,13 @@ class TitleBar extends Component {
     }
 
     render() {
-        //let right = <ToolbarGroup><Login onSubmit={this.submitLogin}/><ToolbarSeparator /><Signup onSubmit={this.submitSignup}/></ToolbarGroup>
-        //if(this.state.user) {
-        //    right = <LoggedIn onLogout={this.signOut} user={this.state.user} />
-        //}
+        if(this.state.user) {
+            return (<LoggedIn onLogout={this.signOut} user={this.state.user} />)
+        }
         return (
+            <ToolbarGroup><Login onSubmit={this.submitLogin}/>{this.state.sep}<Signup onSubmit={this.submitSignup}/></ToolbarGroup>
+        )
 
-            <Toolbar style={{boxShadow: '0 1px 6px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.12)',backgroundColor: this.props.muiTheme.palette.primary1Color}}>
-                <ToolbarGroup>
-
-                    <IconButton onTouchTap={this.props.onDrawerOpen}>
-                        <NavigationMenu color={this.props.muiTheme.palette.alternateTextColor}/>
-                    </IconButton>
-                    <img src="logo.png" height="35" style={{margin:"0 .8em"}} />
-                    <ToolbarTitle  style={{color: this.props.muiTheme.palette.alternateTextColor,fontSize:"1.8em",lineHeight:"1.6em"}} text="Budgt" />
-                </ToolbarGroup>
-                <Hidden xs>
-                    <ToolbarGroup>
-                        <UserButtons sep={<ToolbarSeparator/>} db={this.props.db}/>
-                    </ToolbarGroup>
-                </Hidden>
-            </Toolbar>
-
-
-        );
     }
 }
-export default muiThemeable()(TitleBar);
+export default UserButtons;

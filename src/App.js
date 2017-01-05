@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 import './App.css';
-import 'react-grid-layout/css/styles.css';
-import 'react-resizable/css/styles.css';
-import ReactGridLayout from 'react-grid-layout';
 import SpentForm from './components/SpentForm';
 import TitleBar from './components/TitleBar';
 import TransactionsTable from './components/TransactionsTable';
 import Alert from './components/Alert';
+import SideBar from './components/SideBar';
 import Transactions from './reducers/Transactions';
 import Categories from './reducers/Categories';
 import md5 from 'md5';
@@ -17,7 +15,7 @@ import * as types from './constants/actionTypes'
 import PouchMiddleware from 'pouch-redux-middleware'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import PouchDB from 'pouchdb'
-
+import {Container, Row, Col, Visible, Hidden} from 'react-grid-system'
 import { reducer as formReducer, reset } from 'redux-form'
 import thunk from 'redux-thunk';
 import { teal500, teal700,
@@ -29,7 +27,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {
     Drawer,
     AppBar,
-    MenuItem
+    MenuItem,
+    Paper,
+    Divider
 } from 'material-ui';
 import {fade} from 'material-ui/utils/colorManipulator';
 import {ContentAdd} from 'material-ui/svg-icons';
@@ -137,6 +137,9 @@ class App extends Component {
         store.subscribe(() => {
             var months = {};
             const trs = store.getState().transactions;
+            if(!trs) {
+                return;
+            }
             trs.forEach((tr) => {
                 const d = new Date(tr.date);
                 var month = d.getFullYear() +'-'+(1+d.getMonth());
@@ -148,7 +151,7 @@ class App extends Component {
                 }
             });
             this.setState({months: months});
-            //console.log('MONTHS', months);
+            console.log('MONTHS', months);
             var menuItems = [];
 
             for(var month in this.state.months) {
@@ -165,7 +168,11 @@ class App extends Component {
                     }
                     const ms = this.state.months[month];
 
-                    menuItems.push(<MenuItem key={month} onTouchTap={this.changeMonth.bind(this, month)}>{m +'/'+ d.getFullYear() + ' ('+(ms.length)+' transactions)'}</MenuItem>)
+                    menuItems.push(<div><MenuItem
+                            key={month}
+                            onTouchTap={this.changeMonth.bind(this, month)}>{m +'/'+ d.getFullYear() + ' ('+(ms.length)+' transactions)'}
+
+                        </MenuItem><Divider /></div>)
                 }
 
             }
@@ -201,7 +208,7 @@ class App extends Component {
     }
 
     render() {
-        var alert = '';
+        var alert = <div></div>;
         if(this.state.dbError) {
             alert = <Alert title="Could not connect to local database"
                            text="We won't be able to save your transactions. Are you in incognito  or private browsing mode ? If so, please use a non-incognito window to use this app, we won't save any information remotely unless you signup or login"
@@ -214,17 +221,31 @@ class App extends Component {
                     <div className="App">
                         <TitleBar db={db} store={store} onDrawerOpen={()=>{this.setState({open:!this.state.open})}}/>
 
-                        <Drawer open={this.state.open}>
-                            <AppBar title="Monthly" onLeftIconButtonTouchTap={()=>{
-                             this.setState({open:!this.state.open})
-                            }}/>
-                            {this.state.menuItems}
-                        </Drawer>
-                        <ReactGridLayout className="layout" cols={12} rowHeight={30} width={1200}>
-                            <div className="table" key="b" data-grid={{x: 0, y: 0, w: 16, h: 2, minW: 2, maxW: 16}}>
-                                <TransactionsTable store={store} transactions={this.state.months[this.state.currentMonth]}/>
-                            </div>
-                        </ReactGridLayout>
+                        <SideBar db={db} handleClose={() => {this.setState({open:!this.state.open})}} open={this.state.open} menuItems={this.state.menuItems}/>
+
+                        <Container style={{marginTop:"1em"}}>
+                            <Row>
+
+                                    <Col sm={10} key="b">
+
+                                        <Paper zDepth={1}>
+
+                                            <TransactionsTable store={store} transactions={this.state.months[this.state.currentMonth]}/>
+
+                                        </Paper>
+                                    </Col>
+
+
+                                    <Col sm={2} key="c">
+                                        <Paper zDepth={1}>
+
+                                            Register for blabla
+
+                                        </Paper>
+                                    </Col>
+
+                            </Row>
+                        </Container>
                         <SpentForm onSubmit={this.dosubmit} store={store} />
                         {alert}
                     </div>
