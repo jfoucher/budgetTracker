@@ -7,6 +7,27 @@ import {
     AutoComplete,
 } from 'redux-form-material-ui'
 
+
+const validate = values => {
+    const errors = {};
+    if (!values.name) {
+        errors.name = 'Required'
+    }
+    if (!values.email) {
+        errors.email = 'Required'
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address'
+    }
+
+    if (!values.password) {
+        errors.password = 'Required'
+    } else if (values.password.length < 8) {
+        errors.password = 'Should be at least 8 characters long'
+    }
+    return errors;
+}
+
+
 class SignupForm extends Component {
     static muiName = 'FlatButton';
 
@@ -16,6 +37,7 @@ class SignupForm extends Component {
             open: false,
             snackbarOpen: false,
             snackbarMessage: '',
+
         }
     }
     handleClose = () => {
@@ -23,10 +45,15 @@ class SignupForm extends Component {
     }
 
     sendSubmit = () => {
-        this.setState({open:!this.state.open});
 
         var signup = this.props.handleSubmit();
+
+        if(!this.props.valid) {
+            return;
+        }
+
         signup.then((u) => {
+
             console.log("signup done", u);
             this.setState({
                 snackbarMessage: 'Account successfully created',
@@ -41,24 +68,48 @@ class SignupForm extends Component {
             snackbarMessage: msg,
                 snackbarOpen: true
             });
+
+        }).then(()=>{
+            this.setState({
+                open: false
+            });
         })
     }
 
     render() {
-        const actions = [
+        const  { handleSubmit, submitting } = this.props;
+        var actions = [
             <FlatButton
+                key="button1"
                 label="Cancel"
                 primary={true}
                 onTouchTap={this.handleClose}
                 />,
-            <FlatButton
-                label="Register"
-                primary={true}
-                keyboardFocused={true}
-                onTouchTap={this.sendSubmit}
-                />,
-        ];
-        const  { handleSubmit } = this.props
+
+        ]
+        if(submitting) {
+            actions.push(
+                <FlatButton
+                    key="button2"
+                    label="Registering"
+                    primary={true}
+                    disabled={true}
+                    keyboardFocused={true}
+                    onTouchTap={this.sendSubmit}
+                    />
+            )
+        } else {
+            actions.push(
+                <FlatButton
+                    key="button2"
+                    label="Register"
+                    primary={true}
+                    keyboardFocused={true}
+                    onTouchTap={this.sendSubmit}
+                    />
+            )
+        }
+
         return (
             <div>
                 <RaisedButton secondary={true} label="Register" onTouchTap={this.handleClose} />
@@ -113,7 +164,8 @@ class SignupForm extends Component {
     }
 }
 const Signup = reduxForm({
-    form: 'signup'
+    form: 'signup',
+    validate
 })(SignupForm);
 
 export default Signup;
