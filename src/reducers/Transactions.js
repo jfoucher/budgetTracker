@@ -44,6 +44,20 @@ function Transactions(state = initialState, action) {
             return state.filter(doc =>
                 doc._id !== action.data._id
             );
+
+
+        case t.RESTORE:
+            console.log('restore', action.data);
+            const d = {
+                _id: action.data._id,
+                amount: action.data.amount,
+                date: action.data.date,
+                category: action.data.category,
+                type: 'transaction'
+            };
+            return [d,
+                ...state
+            ];
         case t.UPDATE:
             if(state){
                 return state.map(doc => {

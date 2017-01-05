@@ -168,8 +168,8 @@ class App extends Component {
                     }
                     const ms = this.state.months[month];
 
-                    menuItems.push(<div><MenuItem
-                            key={month}
+                    menuItems.push(<div key={month}><MenuItem
+
                             onTouchTap={this.changeMonth.bind(this, month)}>{m +'/'+ d.getFullYear() + ' ('+(ms.length)+' transactions)'}
 
                         </MenuItem><Divider /></div>)

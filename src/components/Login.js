@@ -26,13 +26,7 @@ class LoginForm extends Component {
         this.setState({open:!this.state.open});
 
         var login = this.props.handleSubmit();
-        console.log('form submitted', login);
-        login.then(() => {
-            this.setState({
-                snackbarMessage: 'Welcome',
-                snackbarOpen: true
-            });
-        }).catch((e) => {
+        login.catch((e) => {
             this.setState({
                 snackbarMessage: 'Could not log you in, sorry. Check your credentials or sign up',
                 snackbarOpen: true
@@ -52,9 +46,9 @@ class LoginForm extends Component {
                 primary={true}
                 keyboardFocused={true}
                 onTouchTap={this.sendSubmit}
-                />,
+                />
         ];
-        const  { handleSubmit } = this.props
+        const  { handleSubmit } = this.props;
         return (
             <div>
                 <RaisedButton primary={true} label="Login" onTouchTap={this.handleClose} />
