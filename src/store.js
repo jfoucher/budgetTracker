@@ -1,35 +1,78 @@
 import * as types from './constants/actionTypes'
 import PouchMiddleware from 'pouch-redux-middleware'
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import PouchDB from 'pouchdb'
-import {combineForms} from  'react-redux-form';
+import Transactions from './reducers/Transactions';
+import Categories from './reducers/Categories';
+import { reducer as formReducer, reset } from 'redux-form'
+import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
+PouchDB.plugin(require('pouchdb-authentication'));
 
-const configureStore = () => {
-    const db = new PouchDB('todos');
-    const initialTransaction = {
-        amount: '',
-        date: '',
-    };
-    const pouchMiddleware = PouchMiddleware({
-        path: '/todos',
-        db: db,
-        actions: {
-            remove: doc => { return { type: types.REMOVE, id: doc._id } },
-            insert: doc => { return { type: types.ADD, transaction: doc } },
-            //update: doc => { return { type: types.UPDATE_TODO, todo: doc } },
+const DB = new PouchDB('budgetTracker');
+
+const store = function() {
+
+    const pouchMiddleware = PouchMiddleware([
+        {
+            path: '/transactions',
+            db: DB,
+            changeFilter: (doc) => {
+                return !doc._deleted && doc.type && doc.type === 'transaction';
+            },
+            actions: {
+                remove: doc => {
+                    return {type:types.REMOVE, data: doc};
+                },
+                insert: doc => {
+                    return {type:types.ADD, data: doc};
+                },
+                update: doc => {
+                    return {type:types.UPDATE, data: doc};
+                }
+            }
+        },
+        {
+            path: '/categories',
+            db: DB,
+            changeFilter: (doc) => {
+                //console.log('filter', doc);
+                return !doc._deleted && doc.type && doc.type === 'category';
+                //doc.type && doc.type === 'category';
+            },
+            actions: {
+                remove: doc => {
+                    return {type:types.REMOVE_CATEGORY, data: doc};
+                },
+                insert: doc => {
+                    return {type:types.ADD_CATEGORY, data: doc};
+                },
+                update: doc => {
+                    return {type:types.UPDATE_CATEGORY, data: doc};
+                }
+            }
         }
-    })
+    ]);
+    const reducers = {
+        transactions: Transactions,
+        categories: Categories,
+        form: formReducer
+    };
 
-    const store = createStore(
-        combineForms({
-            transaction: initialTransaction,
-        }),
-        undefined,
-        applyMiddleware(pouchMiddleware, thunk)
-    )
+    const applyMiddlewares = applyMiddleware(
+        pouchMiddleware,
+        thunk
+        //logger
+    );
 
-    return store
+    const createStoreWithMiddleware = compose(
+        applyMiddlewares
+    )(createStore);
+
+    return createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: []});
 }
-const Store = configureStore();
-export default Store;
+const Store = store();
+export {
+    Store,
+    DB
+};
