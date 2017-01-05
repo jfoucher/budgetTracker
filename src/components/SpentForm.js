@@ -10,6 +10,26 @@ import {
 import {ContentAdd} from 'material-ui/svg-icons';
 
 
+const validate = values => {
+    const errors = {};
+
+    if (!values.date) {
+        errors.date = 'Required'
+    } else if (!values.date instanceof Date) {
+        errors.date = 'Invalid Date'
+    }
+    if (!values.amount) {
+        errors.amount = 'Required'
+    } else if (isNaN(Number(values.amount))) {
+        errors.amount = 'Must be a number'
+    }
+    if (!values.category) {
+        errors.category = 'Required'
+    }
+    return errors
+}
+
+
 class MySpentForm extends Component {
     constructor(props) {
         super(props);
@@ -30,9 +50,13 @@ class MySpentForm extends Component {
         this.setState({open:!this.state.open});
     }
     sendSubmit = () => {
-        console.log('props', this.props)
-        this.props.submit();
-        this.setState({open:!this.state.open});
+        console.log('props', this.props);
+        var s = this.props.submit();
+        console.log('submitted',s);
+        if(this.props.valid) {
+            this.setState({open:!this.state.open});
+        }
+
     }
     render() {
 
@@ -76,9 +100,9 @@ class MySpentForm extends Component {
                     <Divider />
                     <Field
                         name="date"
-                           component={DatePicker}
-                           underlineShow={false}
-                           hintText="Transaction Date"
+                        component={DatePicker}
+                        underlineShow={false}
+                        hintText="Transaction Date"
                         value={new Date()}
                         floatingLabelText="Transaction Date"
                         />
@@ -106,7 +130,8 @@ class MySpentForm extends Component {
     }
 }
 const SpentForm = reduxForm({
-    form: 'transaction'
+    form: 'transaction',
+    validate
 })(MySpentForm);
 
 export default SpentForm

@@ -151,7 +151,6 @@ class App extends Component {
                 }
             });
             this.setState({months: months});
-            console.log('MONTHS', months);
             var menuItems = [];
 
             for(var month in this.state.months) {
@@ -183,14 +182,13 @@ class App extends Component {
     }
 
     changeMonth (month)  {
-        console.log('changing month to ', month);
         this.setState({currentMonth:month, open: !this.state.open})
     }
 
-    dosubmit  = (a) => {
-        store.dispatch( {type:types.ADD_CATEGORY, data: {name: a.category, type: "category"}});
+    dosubmit  = (transaction) => {
+        store.dispatch( {type:types.ADD_CATEGORY, data: {name: transaction.category, type: "category"}});
         store.dispatch(reset('transaction'));
-        store.dispatch( {type:types.ADD, data: a});
+        store.dispatch( {type:types.ADD, data: transaction});
     };
 
 
