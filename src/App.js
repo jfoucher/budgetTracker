@@ -8,6 +8,7 @@ import ReactGridLayout from 'react-grid-layout';
 import SpentForm from './components/SpentForm';
 import TitleBar from './components/TitleBar';
 import TransactionsTable from './components/TransactionsTable';
+import Alert from './components/Alert';
 import Transactions from './reducers/Transactions';
 import Categories from './reducers/Categories';
 import md5 from 'md5';
@@ -57,9 +58,7 @@ const muiTheme = getMuiTheme({
 
 PouchDB.plugin(require('pouchdb-authentication'));
 
-//TODO the local database can have any name
 const db = new PouchDB('budgetTracker');
-
 
 
 
@@ -128,7 +127,8 @@ class App extends Component {
             open: false,
             months: [],
             currentMonth: new Date().getFullYear() + '-' + (new Date().getMonth() + 1),
-            menuItems: []
+            menuItems: [],
+            dbError: false
         }
 
 
@@ -189,13 +189,25 @@ class App extends Component {
 
     //TODO submit to store, reduce transactions to various months, save in state, and display in drawaers
     componentDidMount () {
-        console.log('************App did mount*****************');
+        //console.log('************App did mount*****************');
 
-
+        db.info().catch((e)=>{
+            //Pouch db cannot start, display a big error message
+            this.setState({
+                dbError: e
+            })
+        });
 
     }
 
     render() {
+        var alert = '';
+        if(this.state.dbError) {
+            alert = <Alert title="Could not connect to local database"
+                           text="We won't be able to save your transactions. Are you in incognito  or private browsing mode ? If so, please use a non-incognito window to use this app, we won't save any information remotely unless you signup or login"
+                           open={true}/>
+        }
+
         return (
             <Provider store={store}>
                 <MuiThemeProvider muiTheme={muiTheme}>
@@ -203,7 +215,7 @@ class App extends Component {
                         <TitleBar db={db} store={store} onDrawerOpen={()=>{this.setState({open:!this.state.open})}}/>
 
                         <Drawer open={this.state.open}>
-                            <AppBar title="Budget" onLeftIconButtonTouchTap={()=>{
+                            <AppBar title="Monthly" onLeftIconButtonTouchTap={()=>{
                              this.setState({open:!this.state.open})
                             }}/>
                             {this.state.menuItems}
@@ -214,6 +226,7 @@ class App extends Component {
                             </div>
                         </ReactGridLayout>
                         <SpentForm onSubmit={this.dosubmit} store={store} />
+                        {alert}
                     </div>
                 </MuiThemeProvider>
             </Provider>
