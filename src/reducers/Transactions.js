@@ -7,23 +7,8 @@ const initialState = [];
 function Transactions(state = initialState, action) {
     switch (action.type) {
         case t.ADD:
-            if(state.transactions && state.transactions.length) {
-                var tr = state.transactions;
-                console.log('tr', tr);
-                let d = {
-                    _id: action.data._id || guid(),
-                    amount: action.data.amount,
-                    date: action.data.date,
-                    category: action.data.category,
-                    type: 'transaction'
-                }
-                if(action.data._rev) {
-                    d._rev = action.data._rev
-                }
+            //console.log('ADDING transaction state : ', state, 'action:', action);
 
-                tr.push(d);
-                return  tr;
-            }
             let e = {
                 _id: action.data._id || guid(),
                 amount: action.data.amount,
