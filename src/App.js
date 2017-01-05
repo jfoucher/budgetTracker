@@ -65,9 +65,6 @@ class App extends Component {
             dbError: false
         }
 
-
-
-        //TODO reduce transactions to save them by month
         this.props.store.subscribe(() => {
             var months = {};
             const trs = this.props.store.getState().transactions;
@@ -100,7 +97,7 @@ class App extends Component {
                         m='0'+m
                     }
                     const ms = this.state.months[month];
-                    console.log('transactions for month', month, ms);
+                    //console.log('transactions for month', month, ms);
                     menuItems.push(<div key={month}><MenuItem
 
                             onTouchTap={this.changeMonth.bind(this, month)}>{m +'/'+ d.getFullYear() + ' ('+(ms.length)+' transactions)'}
@@ -111,12 +108,6 @@ class App extends Component {
             }
             this.setState({menuItems: menuItems});
         });
-
-
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        console.log('componentWillUpdate',this.props, this.state, nextProps, nextState)
     }
 
     changeMonth (month)  {
