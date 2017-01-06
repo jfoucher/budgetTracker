@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './SpentForm.css';
 import { Divider, FlatButton, Dialog, FloatingActionButton} from 'material-ui';
+
+
 import { Field, reduxForm } from 'redux-form';
 import {
     TextField,
@@ -56,7 +58,7 @@ class MySpentForm extends Component {
 
     }
     render() {
-
+        console.log('Spentform categories', this.props.categories);
         const actions = [
             <FlatButton
                 label="Cancel"
@@ -110,7 +112,8 @@ class MySpentForm extends Component {
                         underlineShow={false}
                         hintText="Category"
                         floatingLabelText="Category"
-                        dataSource={this.state.categories}
+                        dataSource={this.props.categories}
+                        filter={(searchText, key) => {return key.toLowerCase().indexOf(searchText.toLowerCase()) !== -1;}}
                         />
                     <Divider />
 

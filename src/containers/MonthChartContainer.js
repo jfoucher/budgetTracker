@@ -21,19 +21,20 @@ const getData = (transactions, filter) => {
             const d = new Date(transaction.date);
             return date.getDate() === d.getDate()
         });
+        //console.log('transactions for', date, dayTransactions);
         var cat = {};
         dayTransactions.forEach((tr) => {
-            if(typeof cat[tr.category.name]) {
-                cat[tr.category.name] = tr.amount;
+            if(typeof cat[tr.category.name] === 'undefined') {
+                cat[tr.category.name] = parseFloat(tr.amount);
             } else {
-                cat[tr.category.name] += tr.amount;
+                cat[tr.category.name] += parseFloat(tr.amount);
             }
         });
+
         cat.name = date.toLocaleDateString();
         data.push(cat);
         date.setDate(date.getDate() + 1);
     }
-    console.log('chart data', data);
     return data;
     //Save them by day and stack to return data
 

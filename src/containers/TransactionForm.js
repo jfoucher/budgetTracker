@@ -40,10 +40,19 @@ export const getCategoryColor = (name) => {
     return materialColors[colors[color] + '' + shades[shade]];
 }
 
+const getCategories = (categories, filter) => {
+    //console.log(transactions);
+    const cats = categories.map((c) => {
+        return c.name;
+    });
+
+    return [...new Set(cats)];
+}
+
 const mapStateToProps = (state) => {
 
     return {
-
+        categories: getCategories(state.categories)
     }
 }
 

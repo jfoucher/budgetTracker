@@ -15,7 +15,7 @@ class MonthChart extends Component {
         return(
             <ResponsiveContainer width="100%" height={300}>
                 <BarChart height={300} data={this.props.data}
-                          margin={{top: 5, right: 5, left: 5, bottom: 5}}>
+                          margin={{top: 5, right: 0, left: 0, bottom: 5}}>
                     <XAxis dataKey="name"/>
                     <YAxis/>
                     <CartesianGrid strokeDasharray="3 3"/>
