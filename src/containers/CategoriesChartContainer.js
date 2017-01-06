@@ -33,7 +33,8 @@ const getData = (transactions, filter) => {
 
 const mapStateToProps = (state, b, c) => {
     return {
-        data: getData(state.transactions, state.visibilityFilter)
+        data: getData(state.transactions, state.visibilityFilter),
+        month: state.visibilityFilter
     }
 }
 

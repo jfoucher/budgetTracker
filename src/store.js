@@ -68,7 +68,7 @@ const store = function() {
         applyMiddlewares
     )(createStore);
 
-    return createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: [], UIReducer: false});
+    return createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: []});
 }
 const Store = store();
 export {
