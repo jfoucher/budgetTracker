@@ -74,7 +74,7 @@ TransactionsTable.propTypes = {
     transactions: PropTypes.arrayOf(PropTypes.shape({
         _id: PropTypes.string.isRequired,
         date: PropTypes.string.isRequired,
-        category: PropTypes.string.isRequired,
+        category: PropTypes.object.isRequired,
         amount: PropTypes.string.isRequired
     }).isRequired).isRequired,
     onDeleteClick: PropTypes.func.isRequired

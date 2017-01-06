@@ -18,6 +18,7 @@ function Categories(state = initialState, action) {
                 let e = {
                     _id: action.data._id || guid(),
                     name: action.data.name,
+                    color: action.data.color || '#f5D498',
                     type: 'category'
                 }
                 if(action.data._rev) {

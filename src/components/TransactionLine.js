@@ -8,7 +8,7 @@ const TransactionLine = ({ onDeleteClick, transaction }) => (
     <TableRow key={transaction._id} selectable={false}>
         <TableRowColumn>{transaction.date}</TableRowColumn>
         <TableRowColumn>{transaction.amount}</TableRowColumn>
-        <TableRowColumn>{transaction.category}</TableRowColumn>
+        <TableRowColumn>{transaction.category.name}</TableRowColumn>
         <TableRowColumn>
             <IconButton tooltip="Delete Transaction" onTouchTap={onDeleteClick.bind(null, transaction)}>
                 <ActionDelete />

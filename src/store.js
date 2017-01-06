@@ -9,7 +9,7 @@ import thunk from 'redux-thunk';
 import visibilityFilter from './reducers/visibilityFilter'
 PouchDB.plugin(require('pouchdb-authentication'));
 
-const DB = new PouchDB('budgetTracker');
+const DB = new PouchDB('budgetTracker2');
 
 const store = function() {
 

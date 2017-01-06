@@ -6,9 +6,10 @@ import VisibleTransactionsTable from './containers/VisibleTransactionsTable';
 import SideBarContainer from './containers/SidebarContainer';
 import TitleBar from './components/TitleBar';
 import TransactionForm from './containers/TransactionForm';
-import CategoriesChartContainer from './containers/CategoriesChartContainer';
+import MonthChartContainer from './containers/MonthChartContainer';
+import {Visible} from 'react-grid-system'
 
-
+import {Divider} from 'material-ui'
 import {Container, Row, Col} from 'react-grid-system'
 
 import {
@@ -59,11 +60,12 @@ class App extends Component {
 
                                     </Paper>
                                 </Col>
-
-
+                                <Visible xs>
+                                    <div style={{clear:'both',height:"1em", display:'block'}} />
+                                </Visible>
                                 <Col sm={6} key="c">
                                     <Paper zDepth={1}>
-                                        <CategoriesChartContainer/>
+                                        <MonthChartContainer/>
                                     </Paper>
                                 </Col>
 

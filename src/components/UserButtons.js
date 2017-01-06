@@ -8,7 +8,7 @@ import Login from './Login';
 import LoggedIn from './Logged';
 import md5 from 'md5'
 
-const db = new PouchDB('budgetTracker');
+const db = new PouchDB('budgetTracker2');
 
 class UserButtons extends Component {
     constructor(props) {
