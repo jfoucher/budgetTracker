@@ -46,12 +46,10 @@ class MySpentForm extends Component {
         //});
     }
     handleClose = () => {
-        console.log('togggle open/close')
         this.setState({open:!this.state.open});
     }
     sendSubmit = () => {
         var s = this.props.submit();
-        console.log('submitted',s);
         if(this.props.valid) {
             this.setState({open:!this.state.open});
         }

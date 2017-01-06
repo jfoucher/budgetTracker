@@ -40,12 +40,9 @@ class UserButtons extends Component {
 
         //Check if we're logged in
         db.get('currentUser').then((user) => {
-            console.log('current user is ', user);
             //Check if we can connect to our database.
-            console.log('trying to access this database : ','https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
             const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
             remoteDB.get('currentUser').then((user)=>{
-                console.log('got remote current user', user);
                 this.setState({user:user.data, remoteDB: remoteDB});
                 this.setupSync(remoteDB);
             }).catch((e, r)=>{
@@ -73,7 +70,6 @@ class UserButtons extends Component {
     }
 
     submitLogin  = (a, b, c) => {
-        console.log('login', a, b, c)
         const ajaxOpts = {
             ajax: {
                 headers: {
@@ -93,29 +89,27 @@ class UserButtons extends Component {
         loginPromise.then(function (loginResult) {
 
             remoteDB.getUser(a.email).then((u) => {
-                console.log('USER is ',u);
                 _this.setState({user: u});
                 db.get('currentUser').then((currentUser) => {
-                    console.log('got current user from local db', currentUser);
                     //Modify it
                     u._rev = currentUser._rev;
                     db.put({
                         _id: 'currentUser',
                         data: u
                     }).then((newUser) => {
-                        console.log('user updated from ', currentUser, 'to', newUser);
+                        //console.log('user updated from ', currentUser, 'to', newUser);
                     }).catch((putUserError) => {
-                        console.log('could not update local user', putUserError);
+                        //console.log('could not update local user', putUserError);
                     });
                 }).catch((localUserError) => {
-                    console.log('could not get local user', localUserError);
+                    //console.log('could not get local user', localUserError);
                     db.put({
                         _id: 'currentUser',
                         data: u
                     }).then((newUser) => {
-                        console.log('local user created', newUser);
+                        //console.log('local user created', newUser);
                     }).catch((putUserError) => {
-                        console.log('could not update local user', putUserError);
+                        //console.log('could not update local user', putUserError);
                     });
                 })
 
@@ -124,7 +118,7 @@ class UserButtons extends Component {
             _this.setupSync(remoteDB);
 
         }).catch(function(e) {
-            console.log('could not login', e)
+            //console.log('could not login', e)
             remoteDB.close();
         });
         return loginPromise;
@@ -146,7 +140,6 @@ class UserButtons extends Component {
             fetch('http://ns3292355.ip-5-135-187.eu/db.php', {
                 method: 'GET'
             }).then(function(r) {
-                console.log('updated db', r.json());
 
                 login(a)
             }).catch(function(e){console.log(e)})
@@ -159,7 +152,7 @@ class UserButtons extends Component {
     signOut = () => {
         console.log('log out');
         this.state.remoteDB.logout().then(()=>{
-            console.log('logged out from db');
+            //console.log('logged out from db');
             db.get('currentUser').then((user) => {
                 db.remove(user);
             });
@@ -167,7 +160,7 @@ class UserButtons extends Component {
             this.state.remoteDB.close();
             this.setState({user:false,remoteDB: false});
         }).catch((e) => {
-            console.log('could not logout', e)
+            //console.log('could not logout', e)
         })
     }
 

@@ -24,7 +24,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onDeleteClick: (transaction) => {
-            console.log('dispatching delete transaction action for transaction:', transaction)
             dispatch(deleteTransaction(transaction))
         }
     }

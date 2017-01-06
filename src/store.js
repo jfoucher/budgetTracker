@@ -19,7 +19,6 @@ const store = function() {
             path: '/transactions',
             db: DB,
             changeFilter: (doc) => {
-                console.log('transaction change filter', doc);
                 return !doc._deleted && doc.type && doc.type === 'transaction';
             },
             actions: {
@@ -38,10 +37,7 @@ const store = function() {
             path: '/categories',
             db: DB,
             changeFilter: (doc) => {
-                console.log('categories change filter', doc);
-                //console.log('filter', doc);
                 return !doc._deleted && doc.type && doc.type === 'category';
-                //doc.type && doc.type === 'category';
             },
             actions: {
                 remove: doc => {
@@ -51,7 +47,6 @@ const store = function() {
                     return {type:types.ADD_CATEGORY, data: doc};
                 },
                 update: doc => {
-                    console.error('update category', doc);
                     return {type:types.UPDATE_CATEGORY, data: doc};
                 }
             }

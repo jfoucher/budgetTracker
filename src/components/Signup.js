@@ -54,7 +54,6 @@ class SignupForm extends Component {
 
         signup.then((u) => {
 
-            console.log("signup done", u);
             this.setState({
                 snackbarMessage: 'Account successfully created',
                 snackbarOpen: true

@@ -7,8 +7,6 @@ const initialState = [];
 
 function Transactions(state = initialState, action) {
 
-    console.log('transaction reducer', state, action);
-
     switch (action.type) {
         case t.ADD:
             //console.log('ADDING transaction state : ', state, 'action:', action);
@@ -36,7 +34,6 @@ function Transactions(state = initialState, action) {
 
 
         case t.RESTORE:
-            console.log('restore', action.data);
             const d = {
                 _id: action.data._id,
                 amount: action.data.amount,

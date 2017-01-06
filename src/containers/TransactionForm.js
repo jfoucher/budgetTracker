@@ -20,7 +20,6 @@ const mapDispatchToProps = (dispatch) => {
                 date: data.date.toISOString(),
                 category: data.category,
             }
-            console.log('**************************submitting form****************', data);
             dispatch( {type:ADD_CATEGORY, data: {name: transaction.category, type: "category"}});
             dispatch(reset('transaction'));
             dispatch(addTransaction(transaction));

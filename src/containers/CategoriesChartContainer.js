@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import CategoriesChart from '../components/CategoriesChart'
 
 const getData = (transactions, filter) => {
-    console.error('UPDATING CHART', transactions, filter);
     //Return transaction that correspond to the month given in the filter
 
     const thisMonth = transactions.filter((transaction) => {
@@ -33,7 +32,6 @@ const getData = (transactions, filter) => {
 }
 
 const mapStateToProps = (state, b, c) => {
-    console.error('chart map state to props', state, b, c);
     return {
         data: getData(state.transactions, state.visibilityFilter)
     }
