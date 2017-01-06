@@ -1,5 +1,6 @@
 import * as t from '../constants/actionTypes';
 import {guid} from '../utils'
+import {ignoreActions } from 'redux-ignore';
 
 const initialState = [];
 
@@ -53,4 +54,4 @@ function Categories(state = initialState, action) {
     }
 }
 
-export default Categories
+export default ignoreActions(Categories, [t.TOGGLE_SIDEBAR]);

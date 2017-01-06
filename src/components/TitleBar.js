@@ -30,7 +30,7 @@ class TitleBar extends Component {
             <Toolbar style={{boxShadow: '0 1px 6px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.12)',backgroundColor: this.props.muiTheme.palette.primary1Color}}>
                 <ToolbarGroup>
 
-                    <IconButton onTouchTap={onMenuClick.bind(null, this.props.sidebarOpen)}>
+                    <IconButton onTouchTap={onMenuClick}>
                         <NavigationMenu color={this.props.muiTheme.palette.alternateTextColor}/>
                     </IconButton>
                     <img src="logo.png" height="35" style={{margin:"0 .8em"}} />

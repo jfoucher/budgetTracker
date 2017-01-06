@@ -1,10 +1,14 @@
 import * as t from '../constants/actionTypes';
 import {guid} from '../utils'
+import {ignoreActions } from 'redux-ignore';
 
 const initialState = [];
 
 
 function Transactions(state = initialState, action) {
+
+    console.log('transaction reducer', state, action);
+
     switch (action.type) {
         case t.ADD:
             //console.log('ADDING transaction state : ', state, 'action:', action);
@@ -62,4 +66,4 @@ function Transactions(state = initialState, action) {
     }
 }
 
-export default Transactions
+export default ignoreActions(Transactions, [t.TOGGLE_SIDEBAR, t.ADD_CATEGORY, t.REMOVE_CATEGORY, t.UPDATE_CATEGORY]);

@@ -8,7 +8,6 @@ import { reducer as formReducer, reset } from 'redux-form'
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import visibilityFilter from './reducers/visibilityFilter'
-import UIReducer from './reducers/UIReducer'
 PouchDB.plugin(require('pouchdb-authentication'));
 
 const DB = new PouchDB('budgetTracker');
@@ -20,6 +19,7 @@ const store = function() {
             path: '/transactions',
             db: DB,
             changeFilter: (doc) => {
+                console.log('transaction change filter', doc);
                 return !doc._deleted && doc.type && doc.type === 'transaction';
             },
             actions: {
@@ -38,6 +38,7 @@ const store = function() {
             path: '/categories',
             db: DB,
             changeFilter: (doc) => {
+                console.log('categories change filter', doc);
                 //console.log('filter', doc);
                 return !doc._deleted && doc.type && doc.type === 'category';
                 //doc.type && doc.type === 'category';
@@ -50,6 +51,7 @@ const store = function() {
                     return {type:types.ADD_CATEGORY, data: doc};
                 },
                 update: doc => {
+                    console.error('update category', doc);
                     return {type:types.UPDATE_CATEGORY, data: doc};
                 }
             }
@@ -60,7 +62,6 @@ const store = function() {
         categories: Categories,
         form: formReducer,
         visibilityFilter: visibilityFilter,
-        UIReducer: UIReducer,
     };
 
     const applyMiddlewares = applyMiddleware(
@@ -73,7 +74,7 @@ const store = function() {
         applyMiddlewares
     )(createStore);
 
-    return createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: []});
+    return createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: [], UIReducer: false});
 }
 const Store = store();
 export {

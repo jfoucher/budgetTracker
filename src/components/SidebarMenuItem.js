@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import {MenuItem, Divider} from 'material-ui';
-const SidebarMenuItem = ({ month, onClick }) => {
+const SidebarMenuItem = ({ month, onClick, clickClose }) => {
 
     return (
         <div key={month}><MenuItem

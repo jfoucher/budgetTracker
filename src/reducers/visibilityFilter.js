@@ -1,5 +1,8 @@
+import * as t from '../constants/actionTypes'
+import {ignoreActions } from 'redux-ignore';
 
-const defaultMonth = new Date().getFullYear() + '-' + (new Date().getMonth() + 1)
+const defaultMonth = new Date().getFullYear() + '-' + (new Date().getMonth() + 1);
+
 
 const visibilityFilter = (state = defaultMonth, action) => {
 
@@ -12,4 +15,4 @@ const visibilityFilter = (state = defaultMonth, action) => {
     }
 }
 
-export default visibilityFilter
+export default ignoreActions(visibilityFilter, [t.TOGGLE_SIDEBAR, t.ADD_CATEGORY, t.REMOVE_CATEGORY, t.UPDATE_CATEGORY]);

@@ -3,11 +3,10 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 import './App.css';
 import SpentForm from './components/SpentForm';
-import TitleBar from './components/TitleBar';
 import VisibleTransactionsTable from './containers/VisibleTransactionsTable';
 import Alert from './components/Alert';
 import SideBarContainer from './containers/SidebarContainer';
-import TitleBarContainer from './containers/TitleBarContainer';
+import TitleBar from './components/TitleBar';
 import TransactionForm from './containers/TransactionForm';
 import CategoriesChartContainer from './containers/CategoriesChartContainer';
 
@@ -29,6 +28,24 @@ import {
 import {ContentAdd} from 'material-ui/svg-icons';
 
 class App extends Component {
+    constructor(){
+        super();
+        this.state = {
+            sidebarOpen: false
+        }
+    }
+
+    onMenuClick = () => {
+        this.setState({
+            sidebarOpen: true
+        })
+    }
+    onClickClose = () => {
+        this.setState({
+            sidebarOpen: false
+        })
+    }
+
 
     render() {
 
@@ -37,9 +54,9 @@ class App extends Component {
 
                 <div className="App">
 
-                    <TitleBarContainer/>
+                    <TitleBar onMenuClick={this.onMenuClick}/>
 
-                    <SideBarContainer />
+                    <SideBarContainer open={this.state.sidebarOpen} onClickClose={this.onClickClose} />
 
 
                     <Container style={{marginTop:"1em"}}>

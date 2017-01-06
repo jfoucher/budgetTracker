@@ -10,17 +10,17 @@ class SideBar extends Component {
 
     render() {
 
-        const {months, onClickClose} = this.props
-        console.log('months in sidebar', months)
+        const {months, onClickClose} = this.props;
+        //console.log('months in sidebar', months)
         const menuItems = months.map((m) => {
-            return <FilterSidebarMenuItem key={m} month={m} filter={m}/>
+            return <FilterSidebarMenuItem key={m} month={m} filter={m} clickClose={onClickClose}/>
         })
         return (
             <Drawer open={this.props.open}>
                 <AppBar
                     zDepth={1}
                     title="Menu"
-                    onLeftIconButtonTouchTap={onClickClose.bind(null, this.props.open)}
+                    onLeftIconButtonTouchTap={onClickClose}
                     iconElementLeft={<IconButton><NavigationClose /></IconButton>}
                     />
                 <Visible xs>
