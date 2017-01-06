@@ -25,6 +25,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onDeleteClick: (transaction) => {
             dispatch(deleteTransaction(transaction))
+        },
+        onUndoClick: (transaction) => {
+            console.log('transaction undo delete', transaction)
         }
     }
 }
