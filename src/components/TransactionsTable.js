@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, Snackbar} from 'material-ui';
-import IconButton from 'material-ui/IconButton';
-import ActionDelete from 'material-ui/svg-icons/action/delete';
+
 import * as types from '../constants/actionTypes'
+import TransactionLine from './TransactionLine'
 
 
 class TransactionsTable extends Component {
@@ -13,16 +13,7 @@ class TransactionsTable extends Component {
             snackbarMessage: 'Transaction deleted'
         }
     }
-    deleteTransaction(doc) {
-        console.log('delete transaction', doc);
-        //TODO show undo snack bar
-        this.setState({
-            snackbarOpen: true,
-            deletedTransaction : doc
-        });
-        console.log('delete doc', doc);
-        this.props.store.dispatch({type:types.REMOVE, data: doc})
-    }
+
 
     handleUndo = () => {
         this.props.store.dispatch({type:types.RESTORE, data: this.state.deletedTransaction});
@@ -32,34 +23,21 @@ class TransactionsTable extends Component {
     }
 
     render() {
+        const {transactions, onDeleteClick} = this.props;
         let rows = [];
-        if(!this.props.transactions) {
+        if(transactions.length === 0) {
             rows.push(
             <TableRow key="empty" selectable={false}>
                 <TableRowColumn style={{textAlign:"center"}}>No transaction yet
                 </TableRowColumn>
-            </TableRow>
-            );
+            </TableRow>)
+            ;
         } else {
-            for(var i = 0;i < this.props.transactions.length;i++) {
-                var t = this.props.transactions[i];
-                let date = '';
-                if(t.date) {
-                    date = t.date.toString()
-                }
-                rows.push(
-                    <TableRow key={t._id} selectable={false}>
-                        <TableRowColumn>{date}</TableRowColumn>
-                        <TableRowColumn>{t.amount}</TableRowColumn>
-                        <TableRowColumn>{t.category}</TableRowColumn>
-                        <TableRowColumn>
-                            <IconButton tooltip="Delete Transaction" onTouchTap={this.deleteTransaction.bind(this, t)}>
-                                <ActionDelete />
-                            </IconButton>
-                        </TableRowColumn>
-                    </TableRow>
+            rows = transactions.map((transaction) => {
+                return(
+                    <TransactionLine key={transaction._id} transaction={transaction} onDeleteClick={onDeleteClick} />
                 )
-            }
+            });
         }
 
 
@@ -90,6 +68,16 @@ class TransactionsTable extends Component {
 
         );
     }
+}
+
+TransactionsTable.propTypes = {
+    transactions: PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
+        category: PropTypes.string.isRequired,
+        amount: PropTypes.string.isRequired
+    }).isRequired).isRequired,
+    onDeleteClick: PropTypes.func.isRequired
 }
 
 export default TransactionsTable;

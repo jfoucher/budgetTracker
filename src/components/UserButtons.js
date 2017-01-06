@@ -23,6 +23,7 @@ import {NavigationExpandMoreIcon, NavigationMenu} from 'material-ui/svg-icons';
 import md5 from 'md5'
 import {Visible, Hidden} from 'react-grid-system'
 
+const db = new PouchDB('budgetTracker');
 
 class UserButtons extends Component {
     constructor(props) {
@@ -38,7 +39,7 @@ class UserButtons extends Component {
 
 
         //Check if we're logged in
-        this.props.db.get('currentUser').then((user) => {
+        db.get('currentUser').then((user) => {
             console.log('current user is ', user);
             //Check if we can connect to our database.
             console.log('trying to access this database : ','https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
@@ -61,7 +62,7 @@ class UserButtons extends Component {
     }
 
     setupSync(remoteDB){
-        this.props.db.sync(remoteDB, {
+        db.sync(remoteDB, {
             live: true,
             retry: true
         }).on('change', function (change) {
@@ -88,7 +89,6 @@ class UserButtons extends Component {
         const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(a.email), {skip_setup:true});
         this.setState({remoteDB: remoteDB});
         var loginPromise = remoteDB.login(a.email, a.password, ajaxOpts);
-        const db = this.props.db;
 
         loginPromise.then(function (loginResult) {
 
@@ -141,7 +141,6 @@ class UserButtons extends Component {
                 fullname: a.name
             }
         });
-        const db = this.props.db;
         const login = this.submitLogin;
         signupPromise.then(() => {
             fetch('http://ns3292355.ip-5-135-187.eu/db.php', {
@@ -161,8 +160,8 @@ class UserButtons extends Component {
         console.log('log out');
         this.state.remoteDB.logout().then(()=>{
             console.log('logged out from db');
-            this.props.db.get('currentUser').then((user) => {
-                this.props.db.remove(user);
+            db.get('currentUser').then((user) => {
+                db.remove(user);
             });
 
             this.state.remoteDB.close();

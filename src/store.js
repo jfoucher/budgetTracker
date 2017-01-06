@@ -7,6 +7,8 @@ import Categories from './reducers/Categories';
 import { reducer as formReducer, reset } from 'redux-form'
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
+import visibilityFilter from './reducers/visibilityFilter'
+import UIReducer from './reducers/UIReducer'
 PouchDB.plugin(require('pouchdb-authentication'));
 
 const DB = new PouchDB('budgetTracker');
@@ -56,7 +58,9 @@ const store = function() {
     const reducers = {
         transactions: Transactions,
         categories: Categories,
-        form: formReducer
+        form: formReducer,
+        visibilityFilter: visibilityFilter,
+        UIReducer: UIReducer,
     };
 
     const applyMiddlewares = applyMiddleware(

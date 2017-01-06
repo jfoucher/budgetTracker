@@ -24,12 +24,13 @@ import {Visible, Hidden} from 'react-grid-system'
 class TitleBar extends Component {
 
     render() {
+        const {onMenuClick} = this.props
         return (
 
             <Toolbar style={{boxShadow: '0 1px 6px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.12)',backgroundColor: this.props.muiTheme.palette.primary1Color}}>
                 <ToolbarGroup>
 
-                    <IconButton onTouchTap={this.props.onDrawerOpen}>
+                    <IconButton onTouchTap={onMenuClick.bind(null, this.props.sidebarOpen)}>
                         <NavigationMenu color={this.props.muiTheme.palette.alternateTextColor}/>
                     </IconButton>
                     <img src="logo.png" height="35" style={{margin:"0 .8em"}} />
@@ -37,7 +38,7 @@ class TitleBar extends Component {
                 </ToolbarGroup>
                 <Hidden xs>
                     <ToolbarGroup>
-                        <UserButtons sep={<ToolbarSeparator/>} db={this.props.db}/>
+                        <UserButtons sep={<ToolbarSeparator/>}/>
                     </ToolbarGroup>
                 </Hidden>
             </Toolbar>

@@ -39,18 +39,17 @@ class MySpentForm extends Component {
 
         };
 
-        props.store.subscribe(() => {
-            this.setState({
-                categories: props.store.getState().categories.map((c) => {return c.name})
-            });
-        });
+        //props.store.subscribe(() => {
+        //    this.setState({
+        //        categories: props.store.getState().categories.map((c) => {return c.name})
+        //    });
+        //});
     }
     handleClose = () => {
         console.log('togggle open/close')
         this.setState({open:!this.state.open});
     }
     sendSubmit = () => {
-        console.log('props', this.props);
         var s = this.props.submit();
         console.log('submitted',s);
         if(this.props.valid) {
@@ -87,7 +86,7 @@ class MySpentForm extends Component {
                 modal={false}
                 open={this.state.open}
                 onRequestClose={this.handleClose}>
-                <form onSubmit={handleSubmit}>
+                <form>
                     <Field
                         name="amount"
                         component={TextField}

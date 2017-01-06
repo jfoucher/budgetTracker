@@ -4,27 +4,32 @@ import { Field, reduxForm } from 'redux-form';
 import {Visible, Hidden} from 'react-grid-system'
 import UserButtons from './UserButtons';
 import {NavigationClose} from 'material-ui/svg-icons';
+import FilterSidebarMenuItem from '../containers/FilterSidebarMenuItem'
 
 class SideBar extends Component {
 
     render() {
 
-
+        const {months, onClickClose} = this.props
+        console.log('months in sidebar', months)
+        const menuItems = months.map((m) => {
+            return <FilterSidebarMenuItem key={m} month={m} filter={m}/>
+        })
         return (
             <Drawer open={this.props.open}>
                 <AppBar
                     zDepth={1}
                     title="Menu"
-                    onLeftIconButtonTouchTap={this.props.handleClose}
+                    onLeftIconButtonTouchTap={onClickClose.bind(null, this.props.open)}
                     iconElementLeft={<IconButton><NavigationClose /></IconButton>}
                     />
                 <Visible xs>
                     <div style={{margin:"1em"}}>
-                        <UserButtons db={this.props.db}/>
+                        <UserButtons/>
                     </div>
                     <Divider/>
                 </Visible>
-                {this.props.menuItems}
+                {menuItems}
             </Drawer>
 
         );
