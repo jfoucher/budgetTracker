@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import {RaisedButton, Paper, Divider, FlatButton, Dialog, FloatingActionButton, Snackbar} from 'material-ui';
+import {RaisedButton, Divider, FlatButton, Dialog, Snackbar} from 'material-ui';
 import { Field, reduxForm } from 'redux-form';
 import {
-    TextField,
-    DatePicker,
-    AutoComplete,
+    TextField
 } from 'redux-form-material-ui'
 
 class LoginForm extends Component {

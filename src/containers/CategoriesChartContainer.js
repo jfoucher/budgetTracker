@@ -7,7 +7,7 @@ const getData = (transactions, filter) => {
     const thisMonth = transactions.filter((transaction) => {
         const date = new Date(transaction.date);
         const str = date.getFullYear() + '-' + (date.getMonth() + 1);
-        return str == filter
+        return str === filter
     });
     var categories = {};
     for(var i=0; i < thisMonth.length;i++) {

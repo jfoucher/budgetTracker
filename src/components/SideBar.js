@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import {RaisedButton, FlatButton, Dialog, Drawer, AppBar, Divider, IconButton} from 'material-ui';
-import { Field, reduxForm } from 'redux-form';
-import {Visible, Hidden} from 'react-grid-system'
+import {Drawer, AppBar, Divider, IconButton} from 'material-ui';
+import {Visible} from 'react-grid-system'
 import UserButtons from './UserButtons';
 import {NavigationClose} from 'material-ui/svg-icons';
 import FilterSidebarMenuItem from '../containers/FilterSidebarMenuItem'

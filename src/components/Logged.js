@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 //import {FlatButton, IconButton, MoreVertIcon, MenuItem, IconMenu, NavigationClose} from 'material-ui';
-import {IconButton, IconMenu, MenuItem, Avatar, Paper, FlatButton, Popover, Menu, RaisedButton} from 'material-ui';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import md5 from 'md5'
+import {MenuItem, Popover, Menu, RaisedButton} from 'material-ui';
 
 class LoggedIn extends Component {
     static muiName = 'IconMenu';
@@ -33,7 +31,7 @@ class LoggedIn extends Component {
 
     render() {
         //return(<FlatButton {...this.props} label="Logged" />);
-        const url = 'https://www.gravatar.com/avatar/'+md5('jfoucher@gmail.com'.toLowerCase())+'.jpg?s=100';
+        //const url = 'https://www.gravatar.com/avatar/'+md5('jfoucher@gmail.com'.toLowerCase())+'.jpg?s=100';
 
         return (
             <div>

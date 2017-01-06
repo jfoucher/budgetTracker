@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import {RaisedButton, Paper, Divider, FlatButton, Dialog, FloatingActionButton, Snackbar} from 'material-ui';
+import {RaisedButton, Divider, FlatButton, Dialog, Snackbar} from 'material-ui';
 import { Field, reduxForm } from 'redux-form';
 import {
-    TextField,
-    DatePicker,
-    AutoComplete,
+    TextField
 } from 'redux-form-material-ui'
 
 
@@ -60,7 +58,7 @@ class SignupForm extends Component {
             });
         }).catch((e) => {
             var msg = 'Could not create your account, sorry. Are you online?';
-            if(e.status == 409) {
+            if(e.status === 409) {
                 msg = 'This account already exists, try logging in';
             }
             this.setState({

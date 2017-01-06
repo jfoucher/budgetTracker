@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { setVisibilityFilter, toggleSidebar } from '../actions'
+import { setVisibilityFilter } from '../actions'
 import SidebarMenuItem from '../components/SidebarMenuItem'
 
 const mapStateToProps = (state, ownProps) => {

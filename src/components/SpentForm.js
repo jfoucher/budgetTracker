@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './SpentForm.css';
-import {RaisedButton, Paper, Divider, FlatButton, Dialog, FloatingActionButton} from 'material-ui';
+import { Divider, FlatButton, Dialog, FloatingActionButton} from 'material-ui';
 import { Field, reduxForm } from 'redux-form';
 import {
     TextField,
@@ -49,7 +49,7 @@ class MySpentForm extends Component {
         this.setState({open:!this.state.open});
     }
     sendSubmit = () => {
-        var s = this.props.submit();
+        this.props.submit();
         if(this.props.valid) {
             this.setState({open:!this.state.open});
         }
@@ -71,7 +71,6 @@ class MySpentForm extends Component {
                 />,
         ];
 
-        const { handleSubmit } = this.props;
         const style= {
             position: "fixed",
             bottom: "40px",

@@ -1,27 +1,12 @@
 import React, { Component } from 'react';
 import {
-    Toolbar,
-    ToolbarGroup,
-    Drawer,
-    MenuItem,
-    Snackbar,
-    DropDownMenu,
-    ToolbarTitle,
-    ToolbarSeparator,
-    IconMenu,
-    IconButton,
-    RaisedButton,
-    FlatButton,
-    FontIcon,
-
+    ToolbarGroup
 } from 'material-ui';
 import PouchDB from 'pouchdb'
 import Signup from './Signup';
 import Login from './Login';
 import LoggedIn from './Logged';
-import {NavigationExpandMoreIcon, NavigationMenu} from 'material-ui/svg-icons';
 import md5 from 'md5'
-import {Visible, Hidden} from 'react-grid-system'
 
 const db = new PouchDB('budgetTracker');
 

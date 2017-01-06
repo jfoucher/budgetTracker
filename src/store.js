@@ -4,8 +4,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import PouchDB from 'pouchdb'
 import Transactions from './reducers/Transactions';
 import Categories from './reducers/Categories';
-import { reducer as formReducer, reset } from 'redux-form'
-import { Provider } from 'react-redux';
+import { reducer as formReducer } from 'redux-form'
 import thunk from 'redux-thunk';
 import visibilityFilter from './reducers/visibilityFilter'
 PouchDB.plugin(require('pouchdb-authentication'));
