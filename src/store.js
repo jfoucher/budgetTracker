@@ -7,6 +7,7 @@ import Categories from './reducers/Categories';
 import { reducer as formReducer } from 'redux-form'
 import thunk from 'redux-thunk';
 import visibilityFilter from './reducers/visibilityFilter'
+import {guid} from './utils'
 PouchDB.plugin(require('pouchdb-authentication'));
 
 const DB = new PouchDB('budgetTracker2');
@@ -68,7 +69,19 @@ const store = function() {
         applyMiddlewares
     )(createStore);
 
-    return createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: []});
+    //TODO create default categories here
+
+    const defaultCategories = [
+        {_id:guid(), name: 'Groceries', color:'#26a69a', type:"category"},
+        {_id:guid(), name: 'Household Goods', color:'#ffe0b2', type:"category"},
+        {_id:guid(), name: 'Rent', color:'#d84315', type:"category"},
+        {_id:guid(), name: 'Mortgage', color:'#e0e0e0', type:"category"},
+        {_id:guid(), name: 'Car', color:'#f9a825', type:"category"},
+        {_id:guid(), name: 'Fuel', color:'#b2ff59', type:"category"},
+        {_id:guid(), name: 'Home Bills', color:'#81d4fa', type:"category"},
+    ]
+
+    return createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: defaultCategories});
 }
 const Store = store();
 export {

@@ -43,8 +43,8 @@ class TransactionsTable extends Component {
 
         return (
         <div>
-            <Table>
-                <TableHeader displaySelectAll={false}>
+            <Table selectable={false}>
+                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                     <TableRow>
                         <TableHeaderColumn>Date</TableHeaderColumn>
                         <TableHeaderColumn>Amount</TableHeaderColumn>
