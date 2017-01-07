@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import './index.css';
 import { Provider } from 'react-redux';
-import {Store, DB} from './store'
-import {Alert} from 'material-ui';
+import {Store} from './store'
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {fade} from 'material-ui/utils/colorManipulator';
 import { teal500, teal700,
@@ -16,12 +16,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 
 //TODO submit to store, reduce transactions to various months, save in state, and display in drawaers
-var alert = <div></div>;
-DB.info().catch((e)=>{
-        alert = <Alert title="Could not connect to local database"
-                       text="We won't be able to save your transactions. Are you in incognito  or private browsing mode ? If so, please use a non-incognito window to use this app, we won't save any information remotely unless you signup or login"
-                       open={true}/>
-});
 
 
 const muiTheme = getMuiTheme({
@@ -54,7 +48,7 @@ ReactDOM.render(
     <Provider store={Store}>
         <MuiThemeProvider muiTheme={muiTheme}>
             <div>
-                {alert}
+
                 <App />
             </div>
         </MuiThemeProvider>

@@ -7,6 +7,7 @@ class Alert extends Component {
 
 
     constructor(props) {
+        console.log('Alert constructor', props)
         super(props);
         this.state={
             open: this.props.open,
