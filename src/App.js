@@ -7,6 +7,7 @@ import SideBarContainer from './containers/SidebarContainer';
 import TitleBar from './components/TitleBar';
 import TransactionForm from './containers/TransactionForm';
 import MonthChartContainer from './containers/MonthChartContainer';
+import TitleH2Container from './containers/TitleH2Container';
 import {Visible} from 'react-grid-system'
 
 import {Divider} from 'material-ui'
@@ -50,23 +51,20 @@ class App extends Component {
 
 
                     <Container style={{marginTop:"1em"}}>
+                        <TitleH2Container />
                         <Row>
 
                                 <Col sm={6} key="b">
 
-                                    <Paper zDepth={1}>
 
                                         <VisibleTransactionsTable/>
 
-                                    </Paper>
                                 </Col>
                                 <Visible xs>
-                                    <div style={{clear:'both',height:"1em", display:'block'}} />
+                                    <div style={{clear:'both', height:"1em", display:'block'}} />
                                 </Visible>
                                 <Col sm={6} key="c">
-                                    <Paper zDepth={1}>
                                         <MonthChartContainer/>
-                                    </Paper>
                                 </Col>
 
                         </Row>

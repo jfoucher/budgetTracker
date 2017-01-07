@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react'
 import {MenuItem, Divider} from 'material-ui';
-const SidebarMenuItem = ({ month, onClick, clickClose }) => {
+import moment from 'moment'
+import {ListItem} from 'material-ui/List';
+import ActionInfo from 'material-ui/svg-icons/action/info';
 
+const SidebarMenuItem = ({ month, onClick, clickClose, numberOfTransactions }) => {
+    const date = moment(month, "YYYY-M");
     return (
-        <div key={month}><MenuItem
-
-            onTouchTap={onClick}>{month}
-
-        </MenuItem><Divider /></div>
+    <ListItem onTouchTap={onClick} primaryText={date.format('MMM YYYY')} secondaryText={numberOfTransactions + " transaction"+(numberOfTransactions>1 ? 's' : '')} />
     )
 }
 

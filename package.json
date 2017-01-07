@@ -8,6 +8,7 @@
   "dependencies": {
     "material-ui": "^0.16.6",
     "md5": "^2.2.1",
+    "moment": "^2.17.1",
     "pouch-redux-middleware": "jfoucher/pouch-redux-middleware",
     "pouchdb": "^6.1.0",
     "pouchdb-authentication": "^0.5.5",
@@ -28,6 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && sw-precache --config=sw-precache-config.js",
+    "deploy": "react-scripts build && sw-precache --config=sw-precache-config.js && scp -r ./build/* ovh:/var/www/app.budgt.eu/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

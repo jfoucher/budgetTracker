@@ -109,7 +109,7 @@ class SignupForm extends Component {
 
         return (
             <div>
-                <RaisedButton secondary={true} label="Register" onTouchTap={this.handleClose} />
+                <RaisedButton title="Signup to sync and backup your data" secondary={true} label="Signup" onTouchTap={this.handleClose} />
                 <Dialog title="Register to sync and backup your data"
                         actions={actions}
                         modal={false}

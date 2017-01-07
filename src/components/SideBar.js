@@ -4,15 +4,15 @@ import {Visible} from 'react-grid-system'
 import UserButtons from './UserButtons';
 import {NavigationClose} from 'material-ui/svg-icons';
 import FilterSidebarMenuItem from '../containers/FilterSidebarMenuItem'
+import {List} from 'material-ui/List';
 
 class SideBar extends Component {
 
     render() {
 
         const {months, onClickClose} = this.props;
-        //console.log('months in sidebar', months)
         const menuItems = months.map((m) => {
-            return <FilterSidebarMenuItem key={m} month={m} filter={m} clickClose={onClickClose}/>
+            return <FilterSidebarMenuItem key={m} month={m} numberOfTransactions={this.props.transactionsPerMonth[m]} filter={m} clickClose={onClickClose}/>
         })
         return (
             <Drawer open={this.props.open}>
@@ -28,7 +28,10 @@ class SideBar extends Component {
                     </div>
                     <Divider/>
                 </Visible>
-                {menuItems}
+                <List>
+                    {menuItems}
+                </List>
+
             </Drawer>
 
         );

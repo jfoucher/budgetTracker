@@ -3,7 +3,7 @@ import { setVisibilityFilter } from '../actions'
 import SidebarMenuItem from '../components/SidebarMenuItem'
 
 const mapStateToProps = (state, ownProps) => {
-    return {
+    return { ...ownProps,
         active: ownProps.filter === state.visibilityFilter
     }
 }

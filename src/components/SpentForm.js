@@ -58,7 +58,6 @@ class MySpentForm extends Component {
 
     }
     render() {
-        console.log('Spentform categories', this.props.categories);
         const actions = [
             <FlatButton
                 label="Cancel"

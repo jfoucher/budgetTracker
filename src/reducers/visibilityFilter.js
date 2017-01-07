@@ -1,7 +1,7 @@
 import * as t from '../constants/actionTypes'
 import {ignoreActions } from 'redux-ignore';
 
-const defaultMonth = new Date().getFullYear() + '-' + (new Date().getMonth() + 1);
+const defaultMonth = new Date().getFullYear() + '' + (new Date().getMonth() + 1);
 
 
 const visibilityFilter = (state = defaultMonth, action) => {

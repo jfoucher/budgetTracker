@@ -8,7 +8,7 @@ const getVisibleTransactions = (transactions, filter) => {
 
     return transactions.filter((transaction) => {
         const date = new Date(transaction.date);
-        const str = date.getFullYear() + '-' + (date.getMonth() + 1);
+        const str = date.getFullYear() + '' + (date.getMonth() + 1);
         return str === filter
     });
 
