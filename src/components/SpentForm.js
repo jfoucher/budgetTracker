@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './SpentForm.css';
 import { Divider, FlatButton, Dialog, FloatingActionButton} from 'material-ui';
-
+import {getScreenClass} from '../utils'
 
 import { Field, reduxForm } from 'redux-form';
 import {
@@ -58,6 +58,18 @@ class MySpentForm extends Component {
 
     }
     render() {
+
+        var css = {};
+        if(getScreenClass(true, true) === "xs") {
+            css = {
+                maxWidth:"none",
+                width: "100%",
+                maxHeight: "none",
+                height: "100%",
+                overflow: "scroll"
+            }
+        }
+
         const actions = [
             <FlatButton
                 label="Cancel"
@@ -83,7 +95,10 @@ class MySpentForm extends Component {
                 actions={actions}
                 modal={false}
                 open={this.state.open}
-                onRequestClose={this.handleClose}>
+                onRequestClose={this.handleClose}
+                contentStyle={css}
+                autoScrollBodyContent={true}
+                >
                 <form>
                     <Field
                         name="amount"
@@ -102,6 +117,9 @@ class MySpentForm extends Component {
                         hintText="Transaction Date"
                         value={new Date()}
                         floatingLabelText="Transaction Date"
+                        autoOk={true}
+                        style={{maxWidth:'100%', transform:'none'}}
+                        dialogContainerStyle={{maxWidth:'100%', transform:'translate(0px, -35px)'}}
                         />
 
                     <Divider />
@@ -114,7 +132,6 @@ class MySpentForm extends Component {
                         dataSource={this.props.categories}
                         filter={(searchText, key) => {return key.toLowerCase().indexOf(searchText.toLowerCase()) !== -1;}}
                         />
-                    <Divider />
 
                 </form>
 

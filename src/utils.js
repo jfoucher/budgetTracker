@@ -5,3 +5,28 @@ export const guid = () => {
         return v.toString(16);
     });
 }
+
+const getViewPort = ({ phone, tablet }) => {
+    let viewport = 1600;
+    if (tablet) viewport = 768; // iPad portrait width
+    if (phone) viewport = 375; // iPhone 6 width
+    if (typeof window !== 'undefined' && window.innerWidth) {
+        viewport = window.innerWidth;
+    }
+    return viewport;
+};
+
+export const  getScreenClass = ({ phone, tablet, breakpoints }) => {
+    const defaultBreakpoints = [576, 768, 992, 1200];
+    const theBreakpoints = breakpoints && breakpoints.length ? breakpoints : defaultBreakpoints;
+    const viewport = getViewPort({ phone, tablet });
+
+    let screenClass = 'xs';
+
+    if (theBreakpoints[0] && viewport >= theBreakpoints[0]) screenClass = 'sm';
+    if (theBreakpoints[1] && viewport >= theBreakpoints[1]) screenClass = 'md';
+    if (theBreakpoints[2] && viewport >= theBreakpoints[2]) screenClass = 'lg';
+    if (theBreakpoints[3] && viewport >= theBreakpoints[3]) screenClass = 'xl';
+
+    return screenClass;
+};

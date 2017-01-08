@@ -18,7 +18,7 @@ class TitleBar extends Component {
         const {onMenuClick} = this.props
         return (
 
-            <Toolbar style={{boxShadow: '0 1px 6px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.12)',backgroundColor: this.props.muiTheme.palette.primary1Color}}>
+            <Toolbar style={{boxShadow: '0 1px 6px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.12)',backgroundColor: this.props.muiTheme.palette.primary1Color, padding:"0 12px"}}>
                 <ToolbarGroup>
 
                     <IconButton onTouchTap={onMenuClick}>

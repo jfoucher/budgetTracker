@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {RaisedButton, Divider, FlatButton, Dialog, Snackbar} from 'material-ui';
 import { Field, reduxForm } from 'redux-form';
+import {getScreenClass} from '../utils'
 import {
     TextField
 } from 'redux-form-material-ui'
@@ -33,6 +34,19 @@ class LoginForm extends Component {
     }
 
     render() {
+
+        var css = {};
+        if(getScreenClass(true, true) === "xs") {
+            css = {
+                maxWidth:"none",
+                width: "100%",
+                maxHeight: "none",
+                height: "100%",
+                overflow: "scroll"
+            }
+        }
+
+
         const actions = [
             <FlatButton
                 label="Cancel"
@@ -54,6 +68,8 @@ class LoginForm extends Component {
                         actions={actions}
                         modal={false}
                         open={this.state.open}
+                        autoScrollBodyContent={true}
+                        contentStyle={css}
                         onRequestClose={this.handleClose}>
                     <form onSubmit={handleSubmit}>
                         <Field
@@ -75,7 +91,6 @@ class LoginForm extends Component {
                             type="password"
                             />
 
-                        <Divider />
 
                     </form>
 

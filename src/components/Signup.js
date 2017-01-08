@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import {
     TextField
 } from 'redux-form-material-ui'
+import {getScreenClass} from '../utils'
 
 
 const validate = values => {
@@ -75,6 +76,18 @@ class SignupForm extends Component {
 
     render() {
         const  { handleSubmit, submitting } = this.props;
+        var css = {};
+        console.log(getScreenClass(true, true));
+        if(getScreenClass(true, true) === "xs") {
+            css = {
+                maxWidth:"none",
+                width: "100%",
+                maxHeight: "none",
+                height: "100%",
+                overflow: "scroll"
+            }
+        }
+        console.log('css', css)
         var actions = [
             <FlatButton
                 key="button1"
@@ -108,14 +121,17 @@ class SignupForm extends Component {
         }
 
         return (
-            <div>
+            <div style={{height: "100%"}}>
                 <RaisedButton title="Signup to sync and backup your data" secondary={true} label="Signup" onTouchTap={this.handleClose} />
                 <Dialog title="Register to sync and backup your data"
+                        className="signupForm"
                         actions={actions}
                         modal={false}
                         open={this.state.open}
+                        contentStyle={css}
+                        autoScrollBodyContent={true}
                         onRequestClose={this.handleClose}>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} style={{height: "100%"}}>
                         <Field
                             name="name"
                             component={TextField}
@@ -145,7 +161,6 @@ class SignupForm extends Component {
                             type="password"
                             />
 
-                        <Divider />
 
                     </form>
 
