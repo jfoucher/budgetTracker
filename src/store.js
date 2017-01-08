@@ -9,6 +9,7 @@ import thunk from 'redux-thunk';
 import visibilityFilter from './reducers/visibilityFilter'
 import {guid} from './utils'
 PouchDB.plugin(require('pouchdb-authentication'));
+PouchDB.debug.enable('*');
 
 const DB = new PouchDB('budgetTracker2');
 
@@ -37,7 +38,7 @@ const store = function() {
             path: '/categories',
             db: DB,
             changeFilter: (doc) => {
-                return !doc._deleted && doc.type && doc.type === 'category';
+                return !doc._deleted && doc.type && doc.type === 'category' && doc.default !== true;
             },
             actions: {
                 remove: doc => {
@@ -69,18 +70,18 @@ const store = function() {
         applyMiddlewares
     )(createStore);
 
+
     //TODO create default categories here
 
     const defaultCategories = [
-        {_id:guid(), name: 'Groceries', color:'#26a69a', type:"category"},
-        {_id:guid(), name: 'Household Goods', color:'#ffe0b2', type:"category"},
-        {_id:guid(), name: 'Rent', color:'#d84315', type:"category"},
-        {_id:guid(), name: 'Mortgage', color:'#e0e0e0', type:"category"},
-        {_id:guid(), name: 'Car', color:'#f9a825', type:"category"},
-        {_id:guid(), name: 'Fuel', color:'#b2ff59', type:"category"},
-        {_id:guid(), name: 'Home Bills', color:'#81d4fa', type:"category"},
+        {_id:guid(), name: 'Groceries', color:'#26a69a', type:"category", default:true},
+        {_id:guid(), name: 'Household Goods', color:'#ffe0b2', type:"category", default:true},
+        {_id:guid(), name: 'Rent', color:'#d84315', type:"category", default:true},
+        {_id:guid(), name: 'Mortgage', color:'#e0e0e0', type:"category", default:true},
+        {_id:guid(), name: 'Car', color:'#f9a825', type:"category", default:true},
+        {_id:guid(), name: 'Fuel', color:'#b2ff59', type:"category", default:true},
+        {_id:guid(), name: 'Home Bills', color:'#81d4fa', type:"category", default:true},
     ]
-
     return createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: defaultCategories});
 }
 const Store = store();

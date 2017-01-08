@@ -15,7 +15,6 @@ import { teal500, teal700,
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 
-//TODO submit to store, reduce transactions to various months, save in state, and display in drawaers
 
 
 const muiTheme = getMuiTheme({

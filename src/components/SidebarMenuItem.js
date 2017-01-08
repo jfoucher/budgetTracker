@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react'
-import {MenuItem, Divider} from 'material-ui';
+import {Divider, ListItem, Subheader} from 'material-ui';
 import moment from 'moment'
-import {ListItem} from 'material-ui/List';
 import ActionInfo from 'material-ui/svg-icons/action/info';
 
 const SidebarMenuItem = ({ month, onClick, clickClose, numberOfTransactions }) => {
-    const date = moment(month, "YYYY-M");
+    const date = moment(month, "YYYYMM");
+
     return (
-    <ListItem onTouchTap={onClick} primaryText={date.format('MMM YYYY')} secondaryText={numberOfTransactions + " transaction"+(numberOfTransactions>1 ? 's' : '')} />
+        <ListItem onTouchTap={onClick} primaryText={date.format('MMM YYYY')} secondaryText={numberOfTransactions + " transaction"+(numberOfTransactions>1 ? 's' : '')} />
     )
 }
 

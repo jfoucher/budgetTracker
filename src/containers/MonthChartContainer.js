@@ -1,11 +1,12 @@
 import { connect } from 'react-redux'
 import MonthChart from '../components/MonthChart'
+import moment from 'moment'
 
 const getData = (transactions, filter) => {
     //Return transaction that correspond to the month given in the filter
     const thisMonth = transactions.filter((transaction) => {
-        const date = new Date(transaction.date);
-        const str = date.getFullYear() + '' + (date.getMonth() + 1);
+        const date = moment(transaction.date);
+        const str = date.format('YYYYMM');
         return str === filter
     });
     const year = Number(filter.substr(0,4));
@@ -16,20 +17,25 @@ const getData = (transactions, filter) => {
     date.setMonth(month);
     date.setDate(1);
     var data = [];
+
+    const filterCallback = (transaction) => {
+        const d = new Date(transaction.date);
+        return date.getDate() === d.getDate()
+    };
+
+    const forEachCallback = (tr) => {
+        if(typeof cat[tr.category.name] === 'undefined') {
+            cat[tr.category.name] = parseFloat(tr.amount);
+        } else {
+            cat[tr.category.name] += parseFloat(tr.amount);
+        }
+    }
+
     while(date.getMonth() === month) {
-        const dayTransactions = thisMonth.filter((transaction) => {
-            const d = new Date(transaction.date);
-            return date.getDate() === d.getDate()
-        });
+        const dayTransactions = thisMonth.filter(filterCallback);
         //console.log('transactions for', date, dayTransactions);
         var cat = {};
-        dayTransactions.forEach((tr) => {
-            if(typeof cat[tr.category.name] === 'undefined') {
-                cat[tr.category.name] = parseFloat(tr.amount);
-            } else {
-                cat[tr.category.name] += parseFloat(tr.amount);
-            }
-        });
+        dayTransactions.forEach(forEachCallback);
 
         cat.name = date.toLocaleDateString();
         data.push(cat);
@@ -44,8 +50,8 @@ const getData = (transactions, filter) => {
 const getCategories = (transactions, filter) => {
     //console.log(transactions);
     return transactions.filter((transaction) => {
-        const date = new Date(transaction.date);
-        const str = date.getFullYear() + '' + (date.getMonth() + 1);
+        const date = moment(transaction.date);
+        const str = date.format('YYYYMM');
         return str === filter
     }).map((t) => {
         return t.category;

@@ -63,7 +63,7 @@ const mapDispatchToProps = (dispatch) => {
             const category = {color: color, name: data.category, type: "category"};
             dispatch( {type:ADD_CATEGORY, data: category});
             const transaction = {
-                amount: data.amount,
+                amount: parseFloat(data.amount),
                 date: data.date.toISOString(),
                 category: category,
             }

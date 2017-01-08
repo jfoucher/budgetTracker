@@ -25,14 +25,17 @@ class UserButtons extends Component {
 
         //Check if we're logged in
         db.get('currentUser').then((user) => {
-            //Check if we can connect to our database.
-            const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
-            remoteDB.get('currentUser').then((user)=>{
-                this.setState({user:user.data, remoteDB: remoteDB});
-                this.setupSync(remoteDB);
-            }).catch((e, r)=>{
-                console.log('not logged in', e, r)
-            })
+            if(user.loggedIn === true) {
+                //Check if we can connect to our database.
+                const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
+                remoteDB.get('currentUser').then((user)=>{
+                    this.setState({user:user.data, remoteDB: remoteDB});
+                    this.setupSync(remoteDB);
+                }).catch((e, r)=>{
+                    console.log('not logged in', e, r)
+                })
+            }
+
 
         });
     }
@@ -77,9 +80,10 @@ class UserButtons extends Component {
                 _this.setState({user: u});
                 db.get('currentUser').then((currentUser) => {
                     //Modify it
-                    u._rev = currentUser._rev;
+                    u.loggedIn = true;
                     db.put({
                         _id: 'currentUser',
+                        _rev: currentUser._rev,
                         data: u
                     }).then((newUser) => {
                         //console.log('user updated from ', currentUser, 'to', newUser);
@@ -139,7 +143,8 @@ class UserButtons extends Component {
         this.state.remoteDB.logout().then(()=>{
             //console.log('logged out from db');
             db.get('currentUser').then((user) => {
-                db.remove(user);
+                user.loggedIn = false;
+                db.put(user);
             });
 
             this.state.remoteDB.close();

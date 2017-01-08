@@ -1,14 +1,15 @@
 import { connect } from 'react-redux'
 import { deleteTransaction } from '../actions/'
 import TransactionsTable from '../components/TransactionsTable'
+import moment from 'moment'
 
 const getVisibleTransactions = (transactions, filter) => {
 
     //Return transaction that correspond to the month given in the filter
 
     return transactions.filter((transaction) => {
-        const date = new Date(transaction.date);
-        const str = date.getFullYear() + '' + (date.getMonth() + 1);
+        const date = moment(transaction.date);
+        const str = date.format('YYYYMM');
         return str === filter
     });
 
