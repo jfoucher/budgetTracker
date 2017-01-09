@@ -40,6 +40,7 @@ class TransactionsTable extends Component {
             });
         }
 
+        //TODO add footer with totals
 
         return (
         <div>
@@ -75,7 +76,7 @@ TransactionsTable.propTypes = {
         _id: PropTypes.string.isRequired,
         date: PropTypes.string.isRequired,
         category: PropTypes.object.isRequired,
-        amount: PropTypes.string.isRequired
+        amount: PropTypes.number.isRequired
     }).isRequired).isRequired,
     onDeleteClick: PropTypes.func.isRequired
 }

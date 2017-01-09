@@ -11,7 +11,7 @@ import {guid} from './utils'
 PouchDB.plugin(require('pouchdb-authentication'));
 PouchDB.debug.disable();
 
-const DB = new PouchDB('budgetTracker2');
+const DB = new PouchDB('Budgt');
 
 const store = function() {
 

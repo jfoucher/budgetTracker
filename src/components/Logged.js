@@ -48,9 +48,7 @@ class LoggedIn extends Component {
                     onRequestClose={this.handleRequestClose}
                     >
                     <Menu>
-                        <MenuItem primaryText="Refresh" />
-                        <MenuItem primaryText="Help &amp; feedback" />
-                        <MenuItem primaryText="Settings" />
+
                         <MenuItem primaryText="Sign out" onTouchTap={this.props.onLogout}/>
                     </Menu>
                 </Popover>

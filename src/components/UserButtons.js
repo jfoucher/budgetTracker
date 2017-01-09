@@ -7,8 +7,7 @@ import Signup from './Signup';
 import Login from './Login';
 import LoggedIn from './Logged';
 import md5 from 'md5'
-
-const db = new PouchDB('budgetTracker2');
+import {DB} from '../store'
 
 class UserButtons extends Component {
     constructor(props) {
@@ -24,16 +23,19 @@ class UserButtons extends Component {
 
 
         //Check if we're logged in
-        db.get('currentUser').then((user) => {
+        DB.get('currentUser').then((user) => {
+            //Only do this if our user is logged in
             if(user.loggedIn === true) {
                 //Check if we can connect to our database.
-                const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(user.data.name));
+                const remoteDB = new PouchDB('https://api.budgt.eu/u-'+md5(user.email),{skip_setup:true, ajax: {cache: false}});
+                //Try and get anything to see if we're logged in
                 remoteDB.get('currentUser').then((user)=>{
-                    this.setState({user:user.data, remoteDB: remoteDB});
+                    this.setState({user:{fullname:user.fullname, email: user.email}, remoteDB: remoteDB});
+                    //Set up sync since we're logged in
                     this.setupSync(remoteDB);
                 }).catch((e, r)=>{
                     console.log('not logged in', e, r)
-                })
+                });
             }
 
 
@@ -47,7 +49,7 @@ class UserButtons extends Component {
     }
 
     setupSync(remoteDB){
-        db.sync(remoteDB, {
+        DB.sync(remoteDB, {
             live: true,
             retry: true
         }).on('change', function (change) {
@@ -57,7 +59,7 @@ class UserButtons extends Component {
         });
     }
 
-    submitLogin  = (a, b, c) => {
+    submitLogin  = (a) => {
         const ajaxOpts = {
             ajax: {
                 headers: {
@@ -69,88 +71,152 @@ class UserButtons extends Component {
                 password: a.password
             }
         };
-        var _this = this;
-        const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(a.email), {skip_setup:true});
+
+
+        const remoteDB = new PouchDB('https://api.budgt.eu/u-'+md5(a.email), {skip_setup:true, ajax: {cache: false}});
         this.setState({remoteDB: remoteDB});
         var loginPromise = remoteDB.login(a.email, a.password, ajaxOpts);
+        const loginDone = new Promise((resolve, reject) => {
+            loginPromise.then(function (loginResult) {
 
-        loginPromise.then(function (loginResult) {
+                remoteDB.getUser(a.email).then((u) => {
 
-            remoteDB.getUser(a.email).then((u) => {
-                _this.setState({user: u});
-                db.get('currentUser').then((currentUser) => {
-                    //Modify it
-                    u.loggedIn = true;
-                    db.put({
-                        _id: 'currentUser',
-                        _rev: currentUser._rev,
-                        data: u
-                    }).then((newUser) => {
-                        //console.log('user updated from ', currentUser, 'to', newUser);
-                    }).catch((putUserError) => {
-                        //console.log('could not update local user', putUserError);
-                    });
-                }).catch((localUserError) => {
-                    //console.log('could not get local user', localUserError);
-                    db.put({
-                        _id: 'currentUser',
-                        data: u
-                    }).then((newUser) => {
-                        //console.log('local user created', newUser);
-                    }).catch((putUserError) => {
-                        //console.log('could not update local user', putUserError);
-                    });
-                })
+                    DB.get('currentUser').then((currentUser) => {
+                        //Modify it
+                        console.log('got current local user', currentUser);
+                        currentUser.loggedIn = true;
+                        resolve(currentUser);
+                        DB.put(currentUser).then((newUser) => {
+                            console.log('user updated from ', currentUser, 'to', newUser);
+                        }).catch((putUserError) => {
+                            console.log('could not update local user', putUserError);
+                            reject({message: 'could not update local user', error: putUserError});
+                        });
+                    }).catch((localUserError) => {
 
+                        reject({message:'could not get local user', error: localUserError});
+                        console.log('could not get local user', localUserError);
+
+                    })
+
+                }).catch((e) => {
+                    reject({message:'could not get remote user', error: e});
+                    console.log('could not get remote user', e);
+                });
+
+
+            }).catch(function(e) {
+                //console.log('could not login', e)
+                remoteDB.close();
             });
-            //only do this if the user is authenticated
-            _this.setupSync(remoteDB);
-
-        }).catch(function(e) {
-            //console.log('could not login', e)
-            remoteDB.close();
         });
-        return loginPromise;
+        loginDone.then((user) => {
+            this.setState({user:{fullname: user.fullname, email:user.email}, remoteDB: remoteDB});
+            //Set up sync since we're logged in
+            this.setupSync(remoteDB);
+        });
+
+        return loginDone;
     };
 
 
     submitSignup  = (a, b, c) => {
 
         console.log('login', a, b, c);
-
-        const remoteDB = new PouchDB('https://couchdb-b87a6e.smileupps.com/u-'+md5(a.email));
+        //TODO show spinner or progress bar
+        //Set up remote database
+        const remoteDB = new PouchDB('https://api.budgt.eu/u-'+md5(a.email), {skip_setup:true, ajax: {cache: false}});
+        //Create new user in _users table on remote database
         var signupPromise = remoteDB.signup(a.email, a.password, {
             metadata: {
                 fullname: a.name
             }
         });
-        const login = this.submitLogin;
-        signupPromise.then(() => {
-            fetch('http://ns3292355.ip-5-135-187.eu/db.php', {
-                method: 'GET'
-            }).then(function(r) {
 
-                login(a)
-            }).catch(function(e){console.log(e)})
-        }).catch(function(e){
-            console.log(e)
+
+        return new Promise((resolve, reject) => {
+            signupPromise.then((r) => {
+
+                console.log('remote user signup ok', r);
+
+                //This creates the remote database with the current user as only authenticated user
+                fetch('http://ns3292355.ip-5-135-187.eu/db.php', {
+                    method: 'GET'
+                }).then((r) => {
+                    console.log('Successfully created user database', r);
+
+                    //Then create local user with same data in "data" field
+                    //and loggedIn field to true
+
+                    DB.put({
+                        _id: 'currentUser',
+                        loggedIn: true,
+                        fullname: a.name,
+                        email: a.email
+                    }).then(()=>{
+                        //login
+                        console.log('sucessfully created local user')
+                        this.submitLogin(a).then((u) => {
+                            console.log('sucessfully logged in')
+                            //Get remote user
+                            remoteDB.getUser(a.email).then((u) => {
+                                console.log('got remote user', u);
+
+                                resolve(u);
+
+                            }).catch((e) => {
+                                reject({message: 'Could not get remote user', error: e});
+                                console.log('could not get remote user', e);
+                            });
+
+                        }).catch((e) => {
+                            reject({message: 'Could not log you in.', error: e});
+                        });
+                    }).catch((e) => {
+                        if(e.status === 409) {
+                            reject({message: 'You already have an account on this machine, try logging in with it.', error: e, link:{"label": 'more info', url:"https://budgt.eu/"}});
+                        } else {
+                            reject({message: 'Could not create your account, sorry. Contact us if this error persists', error: e});
+                        }
+
+                        console.log('Could not create local user', e);
+                    })
+
+
+                }).catch((e) => {
+                    reject({message: 'Could not create the remote database', error: e});
+                    //TODO Display alert with error message
+                    console.log(e)
+                })
+            }).catch((e) => {
+                //TODO Display alert with error message
+                if(e.status === 409) {
+                    reject({message: 'This account already exists, try logging in', error: e});
+                } else {
+                    reject({message: 'Could not create your account, sorry. Are you online?', error: e});
+                }
+
+                console.log('SIGNUP FAILED', e);
+            });
         });
-        return signupPromise;
+
     };
 
     signOut = () => {
         console.log('log out');
         this.state.remoteDB.logout().then(()=>{
             //console.log('logged out from db');
-            db.get('currentUser').then((user) => {
+            DB.get('currentUser').then((user) => {
                 user.loggedIn = false;
-                db.put(user);
+                DB.put(user);
+            }).catch((e) => {
+                console.log('could not update local user in logout')
             });
 
             this.state.remoteDB.close();
             this.setState({user:false,remoteDB: false});
         }).catch((e) => {
-            //console.log('could not logout', e)
+            console.log('could not logout', e)
         })
     }
 

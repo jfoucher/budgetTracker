@@ -58,12 +58,8 @@ class SignupForm extends Component {
                 snackbarOpen: true
             });
         }).catch((e) => {
-            var msg = 'Could not create your account, sorry. Are you online?';
-            if(e.status === 409) {
-                msg = 'This account already exists, try logging in';
-            }
             this.setState({
-            snackbarMessage: msg,
+            snackbarMessage: e.message,
                 snackbarOpen: true
             });
 

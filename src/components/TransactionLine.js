@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react'
 import {TableRow, TableRowColumn} from 'material-ui';
 import IconButton from 'material-ui/IconButton';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
+import moment from 'moment'
 
 
 const TransactionLine = ({ onDeleteClick, transaction }) => (
     <TableRow key={transaction._id} selectable={false}>
-        <TableRowColumn>{transaction.date}</TableRowColumn>
+        <TableRowColumn>{moment(transaction.date).format('YYYY MM DD')}</TableRowColumn>
         <TableRowColumn>{transaction.amount}</TableRowColumn>
         <TableRowColumn>{transaction.category.name}</TableRowColumn>
         <TableRowColumn>
