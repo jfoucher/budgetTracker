@@ -8,7 +8,8 @@ import {
 } from 'material-ui';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import UserButtons from './UserButtons';
-import {NavigationMenu} from 'material-ui/svg-icons';
+import FontIcon from 'material-ui/FontIcon';
+
 import {Hidden} from 'react-grid-system'
 
 
@@ -22,7 +23,7 @@ class TitleBar extends Component {
                 <ToolbarGroup>
 
                     <IconButton onTouchTap={onMenuClick}>
-                        <NavigationMenu color={this.props.muiTheme.palette.alternateTextColor}/>
+                        <FontIcon className="material-icons" color="white">menu</FontIcon>
                     </IconButton>
                     <img alt="Budgt" src="logo.png" height="35" style={{margin:"0 .8em"}} />
                     <ToolbarTitle  style={{color: this.props.muiTheme.palette.alternateTextColor,fontSize:"1.8em",lineHeight:"1.6em"}} text="Budgt" />

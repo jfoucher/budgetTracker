@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import {RaisedButton, FlatButton, Dialog} from 'material-ui';
-import { Field, reduxForm } from 'redux-form';
+import {FlatButton, Dialog} from 'material-ui';
+
 
 
 class Alert extends Component {
 
 
     constructor(props) {
-        console.log('Alert constructor', props)
+        //console.log('Alert constructor', props)
         super(props);
         this.state={
             open: this.props.open,

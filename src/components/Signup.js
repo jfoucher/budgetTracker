@@ -34,9 +34,6 @@ class SignupForm extends Component {
         super(props);
         this.state={
             open: false,
-            snackbarOpen: false,
-            snackbarMessage: '',
-
         }
     }
     handleClose = () => {
@@ -53,15 +50,7 @@ class SignupForm extends Component {
 
         signup.then((u) => {
 
-            this.setState({
-                snackbarMessage: 'Account successfully created',
-                snackbarOpen: true
-            });
         }).catch((e) => {
-            this.setState({
-            snackbarMessage: e.message,
-                snackbarOpen: true
-            });
 
         }).then(()=>{
             this.setState({
@@ -73,7 +62,7 @@ class SignupForm extends Component {
     render() {
         const  { handleSubmit, submitting } = this.props;
         var css = {};
-        console.log(getScreenClass(true, true));
+        //console.log(getScreenClass(true, true));
         if(getScreenClass(true, true) === "xs") {
             css = {
                 maxWidth:"none",
@@ -83,7 +72,7 @@ class SignupForm extends Component {
                 overflow: "scroll"
             }
         }
-        console.log('css', css)
+        //console.log('css', css)
         var actions = [
             <FlatButton
                 key="button1"
@@ -161,12 +150,7 @@ class SignupForm extends Component {
                     </form>
 
                 </Dialog>
-                <Snackbar
-                    open={this.state.snackbarOpen}
-                    message={this.state.snackbarMessage}
-                    autoHideDuration={6000}
-                    onRequestClose={() => {this.setState({snackbarOpen: !this.state.snackbarOpen})}}
-                    />
+
             </div>
         );
     }

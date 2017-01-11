@@ -9,17 +9,19 @@ import TransactionForm from './containers/TransactionForm';
 import MonthChartContainer from './containers/MonthChartContainer';
 import TitleH2Container from './containers/TitleH2Container';
 import {Visible} from 'react-grid-system'
-import {DB} from './store'
+import {Store, DB} from './store'
 import Alert from './components/Alert'
 import {Container, Row, Col} from 'react-grid-system'
 
-import {
-    Paper
-} from 'material-ui';
-
+//console.log('store', Store);
+//
+//Store.subscribe(() => {
+//    console.log('store state', Store.getState());
+//})
 
 class App extends Component {
     constructor(){
+        document.getElementsByTagName('body')[0].style.background = '';
         super();
         this.state = {
             sidebarOpen: false,

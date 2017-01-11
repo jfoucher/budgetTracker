@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Drawer, AppBar, Divider, IconButton} from 'material-ui';
 import {Visible} from 'react-grid-system'
 import UserButtons from './UserButtons';
-import {NavigationClose} from 'material-ui/svg-icons';
+import FontIcon from 'material-ui/FontIcon';
 import FilterSidebarMenuItem from '../containers/FilterSidebarMenuItem'
 import {List, Subheader, ListItem} from 'material-ui';
 import moment from 'moment'
@@ -35,7 +35,7 @@ class SideBar extends Component {
         //        />
         //        ]}
         //    />
-        console.log('months', months);
+        //console.log('months', months);
         const menuItems = months.map((y, i) => {
 
             const subitems = y.map((m) =>{
@@ -48,7 +48,7 @@ class SideBar extends Component {
                     initiallyOpen={i===0}
                     primaryTogglesNestedList={false}
                     nestedItems={subitems}
-                    onTouchTap={(e) => {console.log(e);alert('display transactions for '+moment(y[0], 'YYYYMM').format('YYYY'))}}
+                    onTouchTap={(e) => {;alert('display transactions for '+moment(y[0], 'YYYYMM').format('YYYY'))}}
                     />
 
         })
@@ -58,7 +58,7 @@ class SideBar extends Component {
                     zDepth={1}
                     title="Menu"
                     onLeftIconButtonTouchTap={onClickClose}
-                    iconElementLeft={<IconButton><NavigationClose /></IconButton>}
+                    iconElementLeft={<IconButton><FontIcon className="material-icons" style={{color: "#fff"}}>close</FontIcon></IconButton>}
                     />
                 <Visible xs>
                     <div style={{margin:"1em"}}>

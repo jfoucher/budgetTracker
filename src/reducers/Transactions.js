@@ -7,6 +7,8 @@ const initialState = [];
 
 function Transactions(state = initialState, action) {
 
+    //console.log('transactions reducer', state, action);
+
     switch (action.type) {
         case t.ADD:
             //console.log('ADDING transaction state : ', state, 'action:', action);
@@ -64,3 +66,4 @@ function Transactions(state = initialState, action) {
 }
 
 export default ignoreActions(Transactions, [t.TOGGLE_SIDEBAR, t.ADD_CATEGORY, t.REMOVE_CATEGORY, t.UPDATE_CATEGORY]);
+//export default Transactions;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {RaisedButton, Divider, FlatButton, Dialog, Snackbar} from 'material-ui';
+import {RaisedButton, Divider, FlatButton, Dialog} from 'material-ui';
 import { Field, reduxForm } from 'redux-form';
 import {getScreenClass} from '../utils'
 import {
@@ -13,8 +13,6 @@ class LoginForm extends Component {
         super(props);
         this.state={
             open: false,
-            snackbarOpen: false,
-            snackbarMessage: '',
         }
     }
     handleClose = () => {
@@ -25,12 +23,6 @@ class LoginForm extends Component {
         this.setState({open:!this.state.open});
 
         var login = this.props.handleSubmit();
-        login.catch((e) => {
-            this.setState({
-                snackbarMessage: 'Could not log you in, sorry. Check your credentials or sign up',
-                snackbarOpen: true
-            });
-        })
     }
 
     render() {
@@ -95,12 +87,7 @@ class LoginForm extends Component {
                     </form>
 
                 </Dialog>
-                <Snackbar
-                    open={this.state.snackbarOpen}
-                    message={this.state.snackbarMessage}
-                    autoHideDuration={6000}
-                    onRequestClose={() => {this.setState({snackbarOpen: !this.state.snackbarOpen})}}
-                    />
+
             </div>
         );
     }

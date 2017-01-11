@@ -5,14 +5,25 @@ import PouchDB from 'pouchdb'
 import Transactions from './reducers/Transactions';
 import Categories from './reducers/Categories';
 import { reducer as formReducer } from 'redux-form'
-import thunk from 'redux-thunk';
 import visibilityFilter from './reducers/visibilityFilter'
 import {guid} from './utils'
+import thunk from 'redux-thunk'
+import * as t from './constants/actionTypes';
 PouchDB.plugin(require('pouchdb-authentication'));
 PouchDB.debug.disable();
 
 const DB = new PouchDB('Budgt');
+const defaultCategories = [
+    {_id:'groceries-default-cat', name: 'Groceries', color:'#26a69a', type:"category", default:true},
+    {_id:'Household-default-cat', name: 'Household Goods', color:'#ffe0b2', type:"category", default:true},
+    {_id:'Rent-default-cat', name: 'Rent', color:'#d84315', type:"category", default:true},
+    {_id:'Mortgage-default-cat', name: 'Mortgage', color:'#e0e0e0', type:"category", default:true},
+    {_id:'Car-default-cat', name: 'Car', color:'#f9a825', type:"category", default:true},
+    {_id:'Fuel-default-cat', name: 'Fuel', color:'#b2ff59', type:"category", default:true},
+    {_id:'Home-default-cat', name: 'Home Bills', color:'#81d4fa', type:"category", default:true},
+];
 
+//DB.bulkDocs(defaultCategories);
 const store = function() {
 
     const pouchMiddleware = PouchMiddleware([
@@ -20,6 +31,7 @@ const store = function() {
             path: '/transactions',
             db: DB,
             changeFilter: (doc) => {
+                console.log('transactions filtering doc', doc, !doc._deleted && doc.type && doc.type === 'transaction');
                 return !doc._deleted && doc.type && doc.type === 'transaction';
             },
             actions: {
@@ -73,18 +85,17 @@ const store = function() {
 
     //TODO create default categories here
 
-    const defaultCategories = [
-        {_id:guid(), name: 'Groceries', color:'#26a69a', type:"category", default:true},
-        {_id:guid(), name: 'Household Goods', color:'#ffe0b2', type:"category", default:true},
-        {_id:guid(), name: 'Rent', color:'#d84315', type:"category", default:true},
-        {_id:guid(), name: 'Mortgage', color:'#e0e0e0', type:"category", default:true},
-        {_id:guid(), name: 'Car', color:'#f9a825', type:"category", default:true},
-        {_id:guid(), name: 'Fuel', color:'#b2ff59', type:"category", default:true},
-        {_id:guid(), name: 'Home Bills', color:'#81d4fa', type:"category", default:true},
-    ]
-    return createStoreWithMiddleware(combineReducers(reducers), {transactions:[], categories: defaultCategories});
+
+
+    return createStoreWithMiddleware(combineReducers(reducers));
 }
 const Store = store();
+
+//defaultCategories.forEach((c) => {
+//    Store.dispatch( {type: t.ADD_CATEGORY, data: c});
+//});
+
+
 export {
     Store,
     DB

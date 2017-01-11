@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import './SpentForm.css';
 import { Divider, FlatButton, Dialog, FloatingActionButton} from 'material-ui';
 import {getScreenClass} from '../utils'
-
+import FontIcon from 'material-ui/FontIcon';
 import { Field, reduxForm } from 'redux-form';
 import {
     TextField,
     DatePicker,
     AutoComplete,
 } from 'redux-form-material-ui'
-import {ContentAdd} from 'material-ui/svg-icons';
+//import {ContentAdd} from 'material-ui/svg-icons';
 
 
 const validate = values => {
@@ -137,7 +136,7 @@ class MySpentForm extends Component {
 
             </Dialog>
             <FloatingActionButton style={style} secondary={true} onTouchTap={this.handleClose} >
-                <ContentAdd/>
+                <FontIcon className="material-icons" style={{color:"white"}}>add</FontIcon>
             </FloatingActionButton>
 
         </div>

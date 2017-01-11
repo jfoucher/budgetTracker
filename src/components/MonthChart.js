@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
-import {getCategoryColor} from '../containers/TransactionForm'
-
 class MonthChart extends Component {
-
-
     render(){
 
         const bars = this.props.categories.map((c) => {
