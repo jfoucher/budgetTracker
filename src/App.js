@@ -7,11 +7,12 @@ import SideBarContainer from './containers/SidebarContainer';
 import TitleBar from './components/TitleBar';
 import TransactionForm from './containers/TransactionForm';
 import MonthChartContainer from './containers/MonthChartContainer';
+import CategoryPieChartContainer from './containers/CategoryPieChartContainer';
 import TitleH2Container from './containers/TitleH2Container';
-import {Visible} from 'react-grid-system'
 import {Store, DB} from './store'
 import Alert from './components/Alert'
 import {Container, Row, Col, Hidden} from 'react-grid-system'
+import {Divider} from 'material-ui'
 
 //console.log('store', Store);
 //
@@ -61,17 +62,23 @@ class App extends Component {
                     <Container style={{marginTop:"1em"}}>
                         <TitleH2Container />
                         <Row>
-                            <Hidden xs>
                                 <Col sm={6} key="b">
-                                        <VisibleTransactionsTable/>
+                                    <CategoryPieChartContainer />
+
                                 </Col>
 
-                            </Hidden>
                                 <Col sm={6} key="c">
                                         <MonthChartContainer/>
                                 </Col>
 
                         </Row>
+                        <Hidden xs>
+                        <Row>
+                            <Col sm={12} key="d">
+                                <VisibleTransactionsTable/>
+                            </Col>
+                        </Row>
+                            </Hidden>
                     </Container>
                     <TransactionForm />                    {this.state.alert}
                 </div>
