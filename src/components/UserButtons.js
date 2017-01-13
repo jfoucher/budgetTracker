@@ -208,7 +208,7 @@ class UserButtons extends Component {
                 //console.log('remote user signup ok', r);
 
                 //This creates the remote database with the current user as only authenticated user
-                fetch('https://6px.eu/db.php', {
+                fetch('https://api.budgt.eu/db.php', {
                     method: 'GET'
                 }).then((r) => {
                     console.log('Successfully created user database', r);
