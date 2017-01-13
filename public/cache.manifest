@@ -2,25 +2,21 @@ CACHE MANIFEST
 #version 0.1.2
 CACHE:
 /index.html
-/static/css/main.c8b2301f.css
-/static/css/main.c8b2301f.css.map
-/static/js/main.62e681b1.js
-/static/js/main.62e681b1.js.map
+/static/css/main.65027555.css
+/static/css/main.65027555.css.map
+/static/js/main.c28f0159.js
+/static/js/main.c28f0159.js.map
 /logo.png
 /favicon.ico
-/images/splash.png
 /320x460.png
 /640x920.png
 /640x1096.png
 /750x1294.png
 /768x1004.png
 /1242x2148.png
-/icons/MaterialIcons-Regular.eot
-/icons/MaterialIcons-Regular.ijmap
-/icons/MaterialIcons-Regular.svg
-/icons/MaterialIcons-Regular.woff
-/icons/MaterialIcons-Regular.woff2
-
+/icons/add.png
+/icons/menu.png
+/icons/close.png
 NETWORK:
 *
 
