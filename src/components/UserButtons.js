@@ -115,8 +115,11 @@ class UserButtons extends Component {
                     console.log('got remote user', u);
                     //console.log('got remote user', username);
                     DB.get('currentUser').then((currentUser) => {
-                        //Modify it
-                        //console.log('got current local user', currentUser);
+                        //Remote db is source of truth for user data, update local user
+
+                        currentUser.email = u.name;
+                        currentUser.username = u.name.toLowerCase();
+                        currentUser.fullname = u.fullname;
                         currentUser.loggedIn = true;
                         resolve(currentUser);
                         DB.put(currentUser).then((newUser) => {
