@@ -91,7 +91,7 @@ class UserButtons extends Component {
 
     submitLogin  = (a) => {
         //console.log('logging in', a);
-        const username = a.email.replace(/[^\w]/gi, '').toLowerCase();
+        const username = a.email.toLowerCase();
         const ajaxOpts = {
             ajax: {
                 headers: {
@@ -110,7 +110,7 @@ class UserButtons extends Component {
         var loginPromise = remoteDB.login(username, a.password, ajaxOpts);
         const loginDone = new Promise((resolve, reject) => {
             loginPromise.then(function (loginResult) {
-                //console.log('successful login', loginResult);
+                console.log('successful login', loginResult);
                 remoteDB.getUser(username).then((u) => {
                     console.log('got remote user', u);
                     //console.log('got remote user', username);
@@ -189,7 +189,7 @@ class UserButtons extends Component {
     submitSignup  = (a, b, c) => {
         //document.cookie.split(";").forEach(function(c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
 
-        const username = a.email.replace(/[^\w]/gi, '').toLowerCase();
+        const username = a.email.toLowerCase();
         //console.log('SIGNUP', a, b, c);
         //TODO show spinner or progress bar
         //Set up remote database
@@ -208,7 +208,7 @@ class UserButtons extends Component {
                 //console.log('remote user signup ok', r);
 
                 //This creates the remote database with the current user as only authenticated user
-                fetch('http://ns3292355.ip-5-135-187.eu/db.php', {
+                fetch('https://6px.eu/db.php', {
                     method: 'GET'
                 }).then((r) => {
                     console.log('Successfully created user database', r);
