@@ -66,6 +66,7 @@ class LoginForm extends Component {
                     <form onSubmit={handleSubmit}>
                         <Field
                             name="email"
+                            type="email"
                             component={TextField}
                             underlineShow={false}
                             hintText="Email"
