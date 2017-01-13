@@ -58,7 +58,7 @@ class SideBar extends Component {
                     zDepth={1}
                     title="Menu"
                     onLeftIconButtonTouchTap={onClickClose}
-                    iconElementLeft={<IconButton><FontIcon className="material-icons" style={{color: "#fff"}}>close</FontIcon></IconButton>}
+                    iconElementLeft={<IconButton><img src="icons/close.png" width="24" /></IconButton>}
                     />
                 <Visible xs>
                     <div style={{margin:"1em"}}>

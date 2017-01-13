@@ -23,7 +23,7 @@ class TitleBar extends Component {
                 <ToolbarGroup>
 
                     <IconButton onTouchTap={onMenuClick}>
-                        <FontIcon className="material-icons" color="white">menu</FontIcon>
+                        <img src="icons/menu.png" width="24" />
                     </IconButton>
                     <img alt="Budgt" src="logo.png" height="35" style={{margin:"0 .8em"}} />
                     <ToolbarTitle  style={{color: this.props.muiTheme.palette.alternateTextColor,fontSize:"1.8em",lineHeight:"1.6em"}} text="Budgt" />

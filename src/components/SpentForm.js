@@ -136,7 +136,9 @@ class MySpentForm extends Component {
 
             </Dialog>
             <FloatingActionButton style={style} secondary={true} onTouchTap={this.handleClose} >
-                <FontIcon className="material-icons" style={{color:"white"}}>add</FontIcon>
+                <div style={{padding:"9px"}}>
+                    <img src="icons/add.png" width="30" height="30" />
+                </div>
             </FloatingActionButton>
 
         </div>
