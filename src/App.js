@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-import './App.css';
+//import './App.css';
 import VisibleTransactionsTable from './containers/VisibleTransactionsTable';
 import SideBarContainer from './containers/SidebarContainer';
 import TitleBar from './components/TitleBar';
@@ -11,7 +11,7 @@ import TitleH2Container from './containers/TitleH2Container';
 import {Visible} from 'react-grid-system'
 import {Store, DB} from './store'
 import Alert from './components/Alert'
-import {Container, Row, Col} from 'react-grid-system'
+import {Container, Row, Col, Hidden} from 'react-grid-system'
 
 //console.log('store', Store);
 //
@@ -21,7 +21,6 @@ import {Container, Row, Col} from 'react-grid-system'
 
 class App extends Component {
     constructor(){
-        document.getElementsByTagName('body')[0].style.background = '';
         super();
         this.state = {
             sidebarOpen: false,
@@ -62,16 +61,12 @@ class App extends Component {
                     <Container style={{marginTop:"1em"}}>
                         <TitleH2Container />
                         <Row>
-
+                            <Hidden xs>
                                 <Col sm={6} key="b">
-
-
                                         <VisibleTransactionsTable/>
-
                                 </Col>
-                                <Visible xs>
-                                    <div style={{clear:'both', height:"1em", display:'block'}} />
-                                </Visible>
+
+                            </Hidden>
                                 <Col sm={6} key="c">
                                         <MonthChartContainer/>
                                 </Col>
