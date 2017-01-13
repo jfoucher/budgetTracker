@@ -1,9 +1,0 @@
-@media (min-width: 480px) {
-    .signupForm > div{
-        width: 100%;
-        max-width: none;
-        height:100%;
-        max-height:none;
-        overflow: scroll;
-    }
-}
