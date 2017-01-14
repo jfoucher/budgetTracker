@@ -20,8 +20,7 @@ const TransactionLine = ({ onDeleteClick, transaction }) => (
 
 TransactionLine.propTypes = {
     onDeleteClick: PropTypes.func.isRequired,
-    transaction: PropTypes.object.isRequired,
-
+    transaction: PropTypes.object.isRequired
 }
 
 export default TransactionLine
