@@ -9,6 +9,7 @@ import TransactionForm from './containers/TransactionForm';
 import MonthChartContainer from './containers/MonthChartContainer';
 import CategoryPieChartContainer from './containers/CategoryPieChartContainer';
 import TitleH2Container from './containers/TitleH2Container';
+import SnackbarContainer from './containers/SnackbarContainer';
 import {Store, DB} from './store'
 import Alert from './components/Alert'
 import {Container, Row, Col, Hidden} from 'react-grid-system'
@@ -27,12 +28,16 @@ class App extends Component {
             sidebarOpen: false,
             alert: <div></div>
         };
+
+
+    }
+
+    componentDidMount() {
         DB.info().catch((e)=>{
             this.setState({alert: <Alert title="Could not connect to local database"
                                          text="We won't be able to save your transactions. Are you in incognito  or private browsing mode ? If so, please use a non-incognito window to use this app, we won't save any information remotely unless you signup or login"
                                          open={true}/>})
         });
-
     }
 
     onMenuClick = () => {
@@ -80,7 +85,11 @@ class App extends Component {
                         </Row>
                             </Hidden>
                     </Container>
-                    <TransactionForm />                    {this.state.alert}
+                    <TransactionForm />
+                    {this.state.alert}
+
+
+                    <SnackbarContainer />
                 </div>
 
         );

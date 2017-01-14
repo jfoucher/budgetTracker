@@ -6,6 +6,7 @@ import Transactions from './reducers/Transactions';
 import Categories from './reducers/Categories';
 import { reducer as formReducer } from 'redux-form'
 import visibilityFilter from './reducers/visibilityFilter'
+import snackbarData from './reducers/snackbarData'
 import {filterActions } from 'redux-ignore';
 import {guid} from './utils'
 import thunk from 'redux-thunk'
@@ -32,7 +33,6 @@ const store = function() {
             path: '/transactions',
             db: DB,
             changeFilter: (doc) => {
-                console.log('transactions filtering doc', doc, !doc._deleted && doc.type && doc.type === 'transaction');
                 return !doc._deleted && doc.type && doc.type === 'transaction';
             },
             actions: {
@@ -71,6 +71,7 @@ const store = function() {
         categories: Categories,
         form: formReducer,
         visibilityFilter: visibilityFilter,
+        snackbarData: snackbarData,
     };
 
     const applyMiddlewares = applyMiddleware(

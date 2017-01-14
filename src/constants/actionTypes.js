@@ -6,3 +6,4 @@ export const ADD_CATEGORY = 'category/ADD';
 export const REMOVE_CATEGORY = 'category/REMOVE';
 export const UPDATE_CATEGORY = 'category/UPDATE';
 export const TOGGLE_SIDEBAR = 'ui/TOGGLE_SIDEBAR';
+export const SHOW_SNACKBAR = 'ui/SHOW_SNACKBAR';
