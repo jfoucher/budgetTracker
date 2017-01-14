@@ -21,3 +21,10 @@ export const setVisibilityFilter = (filter) => {
         filter
     }
 }
+export const showSnackbar = (data) => {
+    console.log('showSnackbar action', data);
+    return {
+        type: t.SHOW_SNACKBAR,
+        ...data
+    }
+}
