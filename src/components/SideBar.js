@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Drawer, AppBar, Divider, IconButton} from 'material-ui';
 import {Visible} from 'react-grid-system'
-import UserButtons from './UserButtons';
+import UserButtonsContainer from '../containers/UserButtonsContainer';
 import FontIcon from 'material-ui/FontIcon';
 import FilterSidebarMenuItem from '../containers/FilterSidebarMenuItem'
 import {List, Subheader, ListItem} from 'material-ui';
@@ -13,29 +13,6 @@ class SideBar extends Component {
 
         const {months, onClickClose} = this.props;
 
-        //const a = <ListItem
-        //    primaryText="Inbox"
-        //    leftIcon={<ContentInbox />}
-        //    initiallyOpen={true}
-        //    primaryTogglesNestedList={true}
-        //    nestedItems={[
-        //        <ListItem
-        //          key={1}
-        //          primaryText="Starred"
-        //          leftIcon={<ActionGrade />}
-        //        />,
-        //        <ListItem
-        //          key={2}
-        //          primaryText="Sent Mail"
-        //          leftIcon={<ContentSend />}
-        //          disabled={true}
-        //          nestedItems={[
-        //            <ListItem key={1} primaryText="Drafts" leftIcon={<ContentDrafts />} />,
-        //          ]}
-        //        />
-        //        ]}
-        //    />
-        //console.log('months', months);
         const menuItems = months.map((y, i) => {
 
             const subitems = y.map((m) =>{
@@ -62,7 +39,8 @@ class SideBar extends Component {
                     />
                 <Visible xs>
                     <div style={{margin:"1em"}}>
-                        <UserButtons/>
+                        <UserButtonsContainer inSidebar={true} />
+
                     </div>
                     <Divider/>
                 </Visible>
