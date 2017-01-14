@@ -1,6 +1,6 @@
 import * as t from '../constants/actionTypes';
 import {guid} from '../utils'
-import {ignoreActions } from 'redux-ignore';
+import {filterActions } from 'redux-ignore';
 
 const initialState = [];
 
@@ -55,4 +55,4 @@ function Categories(state = initialState, action) {
     }
 }
 
-export default ignoreActions(Categories, [t.TOGGLE_SIDEBAR]);
+export default filterActions(Categories, [t.ADD_CATEGORY, t.REMOVE_CATEGORY, t.UPDATE_CATEGORY]);

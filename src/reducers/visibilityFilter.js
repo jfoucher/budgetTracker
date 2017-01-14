@@ -1,5 +1,5 @@
 import * as t from '../constants/actionTypes'
-import {ignoreActions } from 'redux-ignore';
+import {filterActions } from 'redux-ignore';
 import moment from 'moment'
 
 const defaultMonth = moment().format('YYYYMM');
@@ -14,4 +14,4 @@ const visibilityFilter = (state = defaultMonth, action) => {
     }
 }
 
-export default ignoreActions(visibilityFilter, [t.TOGGLE_SIDEBAR, t.ADD_CATEGORY, t.REMOVE_CATEGORY, t.UPDATE_CATEGORY]);
+export default filterActions(visibilityFilter, ['SET_VISIBILITY_FILTER']);

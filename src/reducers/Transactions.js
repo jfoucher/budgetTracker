@@ -1,6 +1,6 @@
 import * as t from '../constants/actionTypes';
 import {guid} from '../utils'
-import {ignoreActions } from 'redux-ignore';
+import {filterActions } from 'redux-ignore';
 
 const initialState = [];
 
@@ -65,5 +65,5 @@ function Transactions(state = initialState, action) {
     }
 }
 
-export default ignoreActions(Transactions, [t.TOGGLE_SIDEBAR, t.ADD_CATEGORY, t.REMOVE_CATEGORY, t.UPDATE_CATEGORY]);
+export default filterActions(Transactions, [t.ADD, t.RESTORE, t.UPDATE, t.REMOVE]);
 //export default Transactions;
