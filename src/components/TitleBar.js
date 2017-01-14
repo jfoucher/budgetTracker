@@ -7,7 +7,7 @@ import {
     IconButton
 } from 'material-ui';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import UserButtons from './UserButtons';
+import UserButtonsContainer from '../containers/UserButtonsContainer';
 import FontIcon from 'material-ui/FontIcon';
 
 import {Hidden} from 'react-grid-system'
@@ -30,7 +30,7 @@ class TitleBar extends Component {
                 </ToolbarGroup>
                 <Hidden xs>
                     <ToolbarGroup>
-                        <UserButtons sep={<ToolbarSeparator/>}/>
+                        <UserButtonsContainer sep={<ToolbarSeparator/>}/>
                     </ToolbarGroup>
                 </Hidden>
             </Toolbar>
