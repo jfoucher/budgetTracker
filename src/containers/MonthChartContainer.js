@@ -9,6 +9,9 @@ const getData = (transactions, filter) => {
         const str = date.format('YYYYMM');
         return str === filter
     });
+
+
+
     const year = Number(filter.substr(0,4));
     const month = Number(filter.substring(4)) - 1;
 
@@ -64,7 +67,8 @@ const mapStateToProps = (state, b, c) => {
     return {
         data: getData(state.transactions, state.visibilityFilter),
         categories: getCategories(state.transactions, state.visibilityFilter),
-        month: state.visibilityFilter
+        month: state.visibilityFilter,
+        sample: !Boolean(state.transactions.length)
     }
 }
 
@@ -74,9 +78,21 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
+
 const MonthChartContainer = connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
+    (stateProps, dispatchProps, ownProps) => {
+        return Object.assign({}, ownProps, stateProps, dispatchProps)
+    },
+    {
+        pure: true,
+        areStatesEqual: (prev, next) => {
+            return prev.transactions === next.transactions;
+        }
+    }
 )(MonthChart)
+
+
 
 export default MonthChartContainer
