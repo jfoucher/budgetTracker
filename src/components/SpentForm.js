@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Divider, FlatButton, Dialog, FloatingActionButton, Popover} from 'material-ui';
-import {getScreenClass} from '../utils'
+import {getScreenClass, debounce} from '../utils'
 import { Field, reduxForm } from 'redux-form';
 import {
     TextField,
@@ -38,38 +38,31 @@ class MySpentForm extends Component {
             open: false,
             hintOpen: false
         };
-
-
-
-        //props.store.subscribe(() => {
-        //    this.setState({
-        //        categories: props.store.getState().categories.map((c) => {return c.name})
-        //    });
-        //});
     }
     handleClose = () => {
-        this.setState({open:!this.state.open, hintOpen: !this.state.hintOpen});
+        var hintOpen = false;
+        if(this.props.hasTransactions === false && this.state.hintOpen === false) {
+            hintOpen = true;
+        }
+        this.setState({open:!this.state.open, hintOpen: hintOpen});
     }
     sendSubmit = () => {
         this.props.submit();
         if(this.props.valid) {
-            this.setState({open:!this.state.open});
+            this.setState({open:!this.state.open, hintOpen: false});
         }
-
     }
 
-    componentDidMount() {
-        console.log('componentDidReceiveProps', this.props);
 
-        if(!this.props.numberOfTransactions) {
-            console.log('openning hint', this.props.numberOfTransactions);
+    componentWillReceiveProps = debounce((newProps) => {
+        if(newProps.hasTransactions === false && this.state.open === false) {
             this.setState({hintOpen: true});
+        } else {
+            this.setState({hintOpen: false});
         }
-    }
+    });
 
     render() {
-
-        console.log('form props', this.props);
         var css = {};
         if(getScreenClass(true, true) === "xs") {
             css = {
