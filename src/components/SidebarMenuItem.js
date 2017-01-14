@@ -7,7 +7,7 @@ const SidebarMenuItem = ({ month, onClick, clickClose, numberOfTransactions }) =
     const date = moment(month, "YYYYMM");
 
     return (
-        <ListItem onTouchTap={onClick} primaryText={date.format('MMM YYYY')} secondaryText={numberOfTransactions + " transaction"+(numberOfTransactions>1 ? 's' : '')} />
+        <ListItem onTouchTap={onClick} primaryText={date.format('MMM YYYY')} secondaryText={<div style={{fontWeight: 300}}>{numberOfTransactions + " transaction"+(numberOfTransactions>1 ? 's' : '')}</div>} />
     )
 }
 
