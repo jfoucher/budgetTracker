@@ -1,7 +1,8 @@
 import { connect } from 'react-redux'
-import { deleteTransaction } from '../actions/'
+import { deleteTransaction, showSnackbar } from '../actions/'
 import TransactionsTable from '../components/TransactionsTable'
 import moment from 'moment'
+import {RESTORE} from '../constants/actionTypes'
 
 const getVisibleTransactions = (transactions, filter) => {
 
@@ -26,9 +27,16 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onDeleteClick: (transaction) => {
             dispatch(deleteTransaction(transaction))
-        },
-        onUndoClick: (transaction) => {
-            //console.log('transaction undo delete', transaction)
+            dispatch(showSnackbar({
+                open:true,
+                message: 'Transaction deleted',
+                actionLabel: 'Undo',
+                onActionTouchTap: () => {
+                    console.log('clicked undo', transaction);
+                    dispatch({type: RESTORE, data: transaction});
+                    dispatch(showSnackbar({open: false, message:''}));
+                }
+            }))
         }
     }
 }
