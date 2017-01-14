@@ -53,7 +53,7 @@ const mapStateToProps = (state) => {
 
     return {
         categories: getCategories(state.categories),
-        numberOfTransactions: state.transactions.length
+        hasTransactions: Boolean(state.transactions.length)
     }
 }
 
