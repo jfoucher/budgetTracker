@@ -30,3 +30,23 @@ export const  getScreenClass = ({ phone, tablet, breakpoints }) => {
 
     return screenClass;
 };
+
+export const getBase64Image = (url) => {
+    return new Promise((resolve, reject) => {
+        var img = document.createElement("img");
+        img.crossOrigin = "anonymous";
+        img.onload = () => {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL("image/jpg"));
+        };
+        img.onerror = (e) => {
+            console.log('image failed to load', e);
+            reject(e);
+        }
+        img.src = url;
+    });
+}

@@ -6,6 +6,7 @@ import Transactions from './reducers/Transactions';
 import Categories from './reducers/Categories';
 import { reducer as formReducer } from 'redux-form'
 import visibilityFilter from './reducers/visibilityFilter'
+import {filterActions } from 'redux-ignore';
 import {guid} from './utils'
 import thunk from 'redux-thunk'
 import * as t from './constants/actionTypes';

@@ -9,6 +9,7 @@ import LoggedIn from './Logged';
 import md5 from 'md5'
 import PouchDB from 'pouchdb'
 import {DB} from '../store'
+import {getBase64Image} from '../utils'
 
 var sync = false;
 
@@ -22,36 +23,39 @@ class UserButtons extends Component {
             user:false,
             sep:'',
             snackbarOpen: false,
-            snackbarMessage: '',
-        }
+            snackbarMessage: ''
+        };
 
         //Check if we're logged in
         DB.get('currentUser').then((user) => {
-            console.log('constructor get local current user', user);
+            //console.log('constructor get local current user', user);
             //Only do this if our user is logged in
             if(user.loggedIn === true) {
-                console.log('constructor local user marked as logged in');
+
+                this.setState({user: user});
+                //console.log('constructor local user marked as logged in');
                 //Check if we can connect to our database.
                 const remoteDB = new PouchDB('https://api.budgt.eu/u-'+md5(user.username),{skip_setup:true, ajax: {cache: false}});
                 //Try and get anything to see if we're logged in
-                console.log('database is ', 'https://api.budgt.eu/u-'+md5(user.username));
+                //console.log('database is ', 'https://api.budgt.eu/u-'+md5(user.username));
                 remoteDB.get('currentUser').then((u)=>{
-                    console.log('constructor got remote user', u);
-                    this.setState({user:user, remoteDB: remoteDB});
+                    //console.log('constructor got remote user', u);
+                    this.setState({remoteDB: remoteDB});
                     //Set up sync since we're logged in
                     this.setupSync(remoteDB);
                 }).catch((e, r)=>{
                     if(e.status === 0) {
-                        console.log('We are offline, display as if we\'re logged in but with local data, making sure to still setup sync');
-                        console.log(user, remoteDB);
+                        //console.log('We are offline, display as if we\'re logged in but with local data, making sure to still setup sync');
+                        //console.log(user, remoteDB);
                         this.setState({user:user, remoteDB: remoteDB});
                         //Set up sync since we're logged in
                         this.setupSync(remoteDB);
+                    } else if(e.message === 'no_db_file' ){
+                        //console.log('database should be '+'https://api.budgt.eu/u-'+md5(user.username), e)
+                    } else {
+                        this.setState({user: false});
                     }
-                    if(e.message === 'no_db_file' ){
-                        console.log('database should be '+'https://api.budgt.eu/u-'+md5(user.username), e)
-                    }
-                    console.log('not logged in', e, r)
+                    //console.log('not logged in', e, r)
                 });
             }
 
@@ -66,26 +70,19 @@ class UserButtons extends Component {
     }
 
     setupSync(remoteDB){
-        console.log('setting up sync', sync);
+        //console.log('setting up sync', sync);
         if(!sync) {
             sync = DB.sync(remoteDB, {
                 live: true,
                 retry: true
             });
             sync.on('change', function (change) {
-                    console.log('change sync', change);
+                    //console.log('change sync', change);
                 }).on('error', function (err) {
                     console.error('sync error', err);
-                }).on('paused', function (info) {
-                console.log('replication paused', info);
-                // replication was paused, usually because of a lost connection
-
-            }).on('active', function (info) {
-                console.log('replication resumed', info);
-                // replication was resumed
-            });
+                });
         }
-        console.log('Sync is set up', sync);
+        //console.log('Sync is set up', sync);
 
     }
 
@@ -110,24 +107,44 @@ class UserButtons extends Component {
         var loginPromise = remoteDB.login(username, a.password, ajaxOpts);
         const loginDone = new Promise((resolve, reject) => {
             loginPromise.then(function (loginResult) {
-                console.log('successful login', loginResult);
+                //console.log('successful login', loginResult);
                 remoteDB.getUser(username).then((u) => {
-                    console.log('got remote user', u);
+                    //console.log('got remote user', u);
                     //console.log('got remote user', username);
+
+
+                    const url = 'https://www.gravatar.com/avatar/'+md5(u.name.toLowerCase())+'.jpg?s=80';
                     DB.get('currentUser').then((currentUser) => {
                         //Remote db is source of truth for user data, update local user
+                        if(u.name !== currentUser.email) {
+                            //Email changed, get avatar
+                            getBase64Image(url).then((r) => {
+                                //console.log('got gravatar image', r);
+                                currentUser.avatar = r;
+                            }).catch((e) => {
+                                //console.log('avatar image failed to load, proceed', e);
 
-                        currentUser.email = u.name;
-                        currentUser.username = u.name.toLowerCase();
-                        currentUser.fullname = u.fullname;
-                        currentUser.loggedIn = true;
-                        resolve(currentUser);
-                        DB.put(currentUser).then((newUser) => {
-                            //console.log('user updated from ', currentUser, 'to', newUser);
-                        }).catch((putUserError) => {
-                            //console.log('could not update local user', putUserError);
-                            reject({message: 'could not update local user', error: putUserError});
-                        });
+                            }).then((r) => {
+                                currentUser.email = u.name;
+                                currentUser.username = u.name.toLowerCase();
+                                currentUser.fullname = u.fullname;
+                                currentUser.loggedIn = true;
+
+                                console.log('currentUser', currentUser);
+
+                                resolve(currentUser);
+                                DB.put(currentUser).then((newUser) => {
+                                    //console.log('user updated from ', currentUser, 'to', newUser);
+                                }).catch((putUserError) => {
+                                    //console.log('could not update local user', putUserError);
+                                    reject({message: 'could not update local user', error: putUserError});
+                                });
+                            });
+                        } else {
+
+                        }
+
+
                     }).catch((localUserError) => {
                         //Local user is not created, probably because we signed up on another device
                         //get remote user and Put it
@@ -137,21 +154,22 @@ class UserButtons extends Component {
                             loggedIn: true,
                             fullname: u.fullname,
                             email: a.email,
-                            username: username,
-
+                            username: username
                         };
 
-                        console.log('curernt User', currentUser);
-
-                        DB.put(currentUser).then(() => {
-                            resolve(currentUser);
+                        getBase64Image(url).then((r) => {
+                            //console.log('got gravatar image', r);
+                            currentUser.avatar = r;
                         }).catch((e) => {
-                            reject({message:'could not get create user', error: e});
-                            console.log('could not get create user', e, currentUser);
+                            //console.log('avatar image failed to load, proceed', e);
+                        }).then((r) => {
+                            DB.put(currentUser).then((newUser) => {
+                                resolve(currentUser);
+                            }).catch((putUserError) => {
+                                //console.log('could not update local user', putUserError);
+                                reject({message: 'Could not create local user', error: putUserError});
+                            });
                         });
-
-
-                    //
                     })
 
                 }).catch((e) => {
@@ -162,10 +180,10 @@ class UserButtons extends Component {
 
             }).catch(function(e) {
                 if(e.status === 0) {
-                    console.log('could not login, offline', e);
+                    //console.log('could not login, offline', e);
                     reject({message:'Login failed. Are you online ?', error: e});
                 }else {
-                    console.log('could not login', e)
+                    //console.log('could not login', e)
                     reject({message:'Login failed: '+e.reason, error: e});
                 }
 
@@ -214,7 +232,7 @@ class UserButtons extends Component {
                 fetch('https://api.budgt.eu/db.php', {
                     method: 'GET'
                 }).then((r) => {
-                    console.log('Successfully created user database', r);
+                    //console.log('Successfully created user database', r);
 
                     //Then create local user with same data in "data" field
                     //and loggedIn field to true
@@ -224,7 +242,8 @@ class UserButtons extends Component {
                         loggedIn: true,
                         fullname: a.name,
                         email: a.email,
-                        username: username
+                        username: username,
+                        avatar: ''
                     }).then(()=>{
                         //login
                         //console.log('sucessfully created local user')
@@ -251,7 +270,7 @@ class UserButtons extends Component {
                             reject({message: 'Could not create your account, sorry. Contact us if this error persists', error: e});
                         }
 
-                        console.log('Could not create local user', e);
+                        //console.log('Could not create local user', e);
                     })
 
 
@@ -265,8 +284,8 @@ class UserButtons extends Component {
                 if(e.status === 409) {
                     reject({message: 'This account already exists, try logging in', error: e});
                 } else {
-                    console.log('remote db is','https://api.budgt.eu/u-'+md5(username));
-                    console.log('Could not create your account, sorry. Are you online?', e)
+                    //console.log('remote db is','https://api.budgt.eu/u-'+md5(username));
+                    //console.log('Could not create your account, sorry. Are you online?', e)
                     reject({message: 'Could not create your account, sorry. Are you online?', error: e});
                 }
 
@@ -288,22 +307,24 @@ class UserButtons extends Component {
 
     signOut = () => {
         //console.log('log out');
+
+        DB.get('currentUser').then((user) => {
+            user.loggedIn = false;
+            DB.put(user).then(() => {
+                this.setState({
+                    snackbarMessage: 'Successfully logged out',
+                    snackbarOpen: true
+                });
+            });
+            this.setState({user:false});
+        }).catch((e) => {
+            //console.log('could not update local user in logout')
+        });
+
         this.state.remoteDB.logout().then(()=>{
             //console.log('logged out from db');
-            DB.get('currentUser').then((user) => {
-                user.loggedIn = false;
-                DB.put(user).then(() => {
-                    this.setState({
-                        snackbarMessage: 'Success fully logged out',
-                        snackbarOpen: true
-                    });
-                });
-            }).catch((e) => {
-                //console.log('could not update local user in logout')
-            });
-
             this.state.remoteDB.close();
-            this.setState({user:false,remoteDB: false});
+            this.setState({remoteDB: false});
         }).catch((e) => {
             //console.log('could not logout', e)
         })
