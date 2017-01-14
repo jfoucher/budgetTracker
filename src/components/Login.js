@@ -46,7 +46,7 @@ class LoginForm extends Component {
                 onTouchTap={this.handleClose}
                 />,
             <FlatButton
-                label="Submit"
+                label="Login"
                 primary={true}
                 keyboardFocused={true}
                 onTouchTap={this.sendSubmit}
