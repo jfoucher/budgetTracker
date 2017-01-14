@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { Divider, FlatButton, Dialog, FloatingActionButton} from 'material-ui';
+import { Divider, FlatButton, Dialog, FloatingActionButton, Popover} from 'material-ui';
 import {getScreenClass} from '../utils'
-import FontIcon from 'material-ui/FontIcon';
 import { Field, reduxForm } from 'redux-form';
 import {
     TextField,
     DatePicker,
     AutoComplete,
 } from 'redux-form-material-ui'
-//import {ContentAdd} from 'material-ui/svg-icons';
+import { grey700, orange700 } from 'material-ui/styles/colors';
 
 
 const validate = values => {
@@ -37,8 +36,10 @@ class MySpentForm extends Component {
         this.state = {
             categories: [],
             open: false,
-
+            hintOpen: false
         };
+
+
 
         //props.store.subscribe(() => {
         //    this.setState({
@@ -47,7 +48,7 @@ class MySpentForm extends Component {
         //});
     }
     handleClose = () => {
-        this.setState({open:!this.state.open});
+        this.setState({open:!this.state.open, hintOpen: !this.state.hintOpen});
     }
     sendSubmit = () => {
         this.props.submit();
@@ -56,8 +57,19 @@ class MySpentForm extends Component {
         }
 
     }
+
+    componentDidMount() {
+        console.log('componentDidReceiveProps', this.props);
+
+        if(!this.props.numberOfTransactions) {
+            console.log('openning hint', this.props.numberOfTransactions);
+            this.setState({hintOpen: true});
+        }
+    }
+
     render() {
 
+        console.log('form props', this.props);
         var css = {};
         if(getScreenClass(true, true) === "xs") {
             css = {
@@ -105,7 +117,7 @@ class MySpentForm extends Component {
                         underlineShow={false}
                         hintText="Transaction Amount"
                         floatingLabelText="Transaction Amount"
-
+                        onChange={() => {}}
                         />
 
                     <Divider />
@@ -135,11 +147,23 @@ class MySpentForm extends Component {
                 </form>
 
             </Dialog>
-            <FloatingActionButton style={style} secondary={true} onTouchTap={this.handleClose} >
+            <FloatingActionButton id="addTransactionButton" style={style} secondary={true} onTouchTap={this.handleClose} >
                 <div style={{padding:"9px"}}>
                     <img src="icons/add.png" width="30" height="30" />
                 </div>
             </FloatingActionButton>
+            <Popover
+                open={this.state.hintOpen}
+                style={{padding:"0.3em 0.5em 0.1em 0.5em", transform: "translate(15px, -10px)", color: grey700, fontWeight: 200}}
+                anchorEl={document.getElementById("addTransactionButton")}
+                useLayerForClickAway={false}
+                anchorOrigin={{ vertical: 'top', horizontal: 'middle'}}
+                targetOrigin={{ vertical: 'bottom', horizontal: 'right'}}
+                zDepth={2}
+                >
+                Click here to create your first transaction
+                <div style={{fontSize: "1.3em", marginTop:"0.3em", color:orange700, transform: "scaleY(0.7)", textAlign: "right"}}>▼</div>
+            </Popover>
 
         </div>
         );

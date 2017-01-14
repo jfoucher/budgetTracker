@@ -52,7 +52,8 @@ const getCategories = (categories, filter) => {
 const mapStateToProps = (state) => {
 
     return {
-        categories: getCategories(state.categories)
+        categories: getCategories(state.categories),
+        numberOfTransactions: state.transactions.length
     }
 }
 
