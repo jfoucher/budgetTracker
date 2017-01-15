@@ -53,9 +53,18 @@ class MySpentForm extends Component {
         }
     }
 
+    componentDidMount() {
+        if(!this.props.hasTransactions && !this.state.open) {
+            this.setState({hintOpen: true});
+        } else {
+            this.setState({hintOpen: false});
+        }
+    }
+
 
     componentWillReceiveProps = debounce((newProps) => {
-        if(newProps.hasTransactions === false && this.state.open === false) {
+        console.log('componentWillReceiveProps', newProps)
+        if(!newProps.hasTransactions && !this.state.open) {
             this.setState({hintOpen: true});
         } else {
             this.setState({hintOpen: false});
