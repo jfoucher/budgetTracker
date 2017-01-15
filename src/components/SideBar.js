@@ -25,7 +25,7 @@ class SideBar extends Component {
                     initiallyOpen={i===0}
                     primaryTogglesNestedList={false}
                     nestedItems={subitems}
-                    onTouchTap={(e) => {;alert('display transactions for '+moment(y[0], 'YYYYMM').format('YYYY'))}}
+                    onTouchTap={(e) => {console.log('display transactions for '+moment(y[0], 'YYYYMM').format('YYYY'), e)}}
                     />
 
         })

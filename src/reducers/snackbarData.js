@@ -3,7 +3,6 @@ import {filterActions } from 'redux-ignore';
 
 
 const snackbarData = (state = {open: false, message: ''}, action) => {
-    console.log('snackbar reducer', state, action);
     switch (action.type) {
         case SHOW_SNACKBAR:
             return {

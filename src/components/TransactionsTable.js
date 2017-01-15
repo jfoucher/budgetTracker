@@ -6,21 +6,6 @@ import TransactionLine from './TransactionLine'
 
 
 class TransactionsTable extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            snackbarOpen: false,
-            snackbarMessage: 'Transaction deleted'
-        }
-    }
-
-
-    handleUndo = () => {
-        this.props.store.dispatch({type:types.RESTORE, data: this.state.deletedTransaction});
-        this.setState({
-            snackbarOpen: false
-        });
-    }
 
     render() {
         const {transactions, onDeleteClick} = this.props;
@@ -57,14 +42,6 @@ class TransactionsTable extends Component {
                     {rows}
                 </TableBody>
             </Table>
-            <Snackbar
-                open={this.state.snackbarOpen}
-                message={this.state.snackbarMessage}
-                autoHideDuration={6000}
-                action="undo"
-                onActionTouchTap={this.handleUndo}
-                onRequestClose={() => {this.setState({snackbarOpen: !this.state.snackbarOpen})}}
-            />
         </div>
 
         );

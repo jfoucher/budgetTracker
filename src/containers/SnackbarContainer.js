@@ -6,7 +6,6 @@ import Snack from '../components/Snack'
 
 
 const mapStateToProps = (state) => {
-    console.log('state.snackbarData.onActionTouchTap', state.snackbarData.onActionTouchTap)
     return {
         open: state.snackbarData.open,
         message: state.snackbarData.message,
