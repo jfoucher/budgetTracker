@@ -18,14 +18,15 @@ class SideBar extends Component {
             const subitems = y.map((m) =>{
                 return <FilterSidebarMenuItem key={'m-'+m} month={m} numberOfTransactions={this.props.transactionsPerMonth[m]} filter={m} clickClose={onClickClose}/>
             }) ;
-
+            const year = moment(y[0], 'YYYYMM').format('YYYY');
             return <ListItem
                     key={'y-'+y}
-                    primaryText={moment(y[0], 'YYYYMM').format('YYYY')}
+                    primaryText={year}
                     initiallyOpen={i===0}
                     primaryTogglesNestedList={false}
                     nestedItems={subitems}
-                    onTouchTap={(e) => {console.log('display transactions for '+moment(y[0], 'YYYYMM').format('YYYY'), e)}}
+                    onTouchTap={this.props.displayYear.bind(null, year)}
+
                     />
 
         })

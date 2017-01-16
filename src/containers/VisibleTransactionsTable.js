@@ -7,10 +7,13 @@ import {RESTORE} from '../constants/actionTypes'
 const getVisibleTransactions = (transactions, filter) => {
 
     //Return transaction that correspond to the month given in the filter
-
+    let format = 'YYYYMM';
+    if(filter.length === 4) {
+        format = 'YYYY';
+    }
     return transactions.filter((transaction) => {
         const date = moment(transaction.date);
-        const str = date.format('YYYYMM');
+        const str = date.format(format);
         return str === filter
     });
 

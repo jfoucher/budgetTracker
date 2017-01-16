@@ -5,10 +5,13 @@ import moment from 'moment'
 const getData = (transactions, filter) => {
 
     //Return transaction that correspond to the month given in the filter
+    let format = 'YYYYMM';
+    if(filter.length === 4) { //If we want to get data for the whole year
+        format = 'YYYY';
+    }
     const thisMonth = transactions.filter((transaction) => {
-        const date = moment(transaction.date);
-        const str = date.format('YYYYMM');
-        return str === filter
+        const str = moment(transaction.date).format(format);
+        return str === filter;
     });
 
     var cats = {};
@@ -32,9 +35,6 @@ const getData = (transactions, filter) => {
     }
 
     return data;
-    //Save them by day and stack to return data
-
-
 }
 
 
@@ -61,7 +61,7 @@ const CategoryPieChartContainer = connect(
     {
         pure: true,
         areStatesEqual: (prev, next) => {
-            return prev.transactions === next.transactions;
+            return prev.transactions === next.transactions && prev.visibilityFilter === next.visibilityFilter;
         }
     }
 )(CategoryPieChart);

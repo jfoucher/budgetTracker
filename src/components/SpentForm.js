@@ -158,10 +158,11 @@ class MySpentForm extends Component {
                 open={this.state.hintOpen}
                 style={{padding:"0.3em 0.5em 0.1em 0.5em", transform: "translate(15px, -10px)", color: grey700, fontWeight: 200}}
                 anchorEl={document.getElementById("addTransactionButton")}
-                useLayerForClickAway={false}
+                useLayerForClickAway={true}
                 anchorOrigin={{ vertical: 'top', horizontal: 'middle'}}
                 targetOrigin={{ vertical: 'bottom', horizontal: 'right'}}
                 zDepth={2}
+                onRequestClose={()=>{this.setState({hintOpen: false})}}
                 >
                 Click here to create your first transaction
                 <div style={{fontSize: "1.3em", marginTop:"0.3em", color:orange700, transform: "scaleY(0.7)", textAlign: "right"}}>▼</div>

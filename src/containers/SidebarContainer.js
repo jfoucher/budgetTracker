@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import SideBar from '../components/SideBar'
 import moment from 'moment'
+import { setVisibilityFilter } from '../actions'
 
 const getAvailableMonths = (transactions) => {
     //Return transaction that correspond to the month given in the filter
@@ -54,9 +55,13 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-
+        displayYear: (year, event) => {
+            console.log('displayYear', year, event);
+            dispatch(setVisibilityFilter(year));
+            ownProps.onClickClose();
+        }
     }
 }
 

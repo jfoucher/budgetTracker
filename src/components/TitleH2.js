@@ -20,7 +20,7 @@ class TitleH2 extends Component {
         return (
             <Row>
                 <Col sm={12}>
-                    <h2 style={{fontWeight: 300, color:this.props.muiTheme.palette.textColor}}>Your spending for {this.props.month}</h2>
+                    <h2 style={{fontWeight: 300, color:this.props.muiTheme.palette.textColor}}>{this.props.month}</h2>
                     <p>
                         {this.state.info}
                     </p>
