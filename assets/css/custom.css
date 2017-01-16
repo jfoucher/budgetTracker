@@ -1,0 +1,22 @@
+#banner h2:before, #banner h2:after {
+    content:none;
+}
+.wrapper.style1 {
+    background-color: #009688;
+    color: #c7ebe8;
+}
+.button.special {
+    background-color: #ff9800;
+}
+
+.button.special:hover {
+    background-color: #ffad46 !important;
+}
+.button.special:active {
+    background-color: #ffad46 !important;
+}
+
+
+#footer .copyright {
+    font-size: 0.6em;
+}
