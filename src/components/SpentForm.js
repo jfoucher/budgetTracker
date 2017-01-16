@@ -53,23 +53,25 @@ class MySpentForm extends Component {
         }
     }
 
-    componentDidMount() {
-        if(!this.props.hasTransactions && !this.state.open) {
-            this.setState({hintOpen: true});
-        } else {
-            this.setState({hintOpen: false});
-        }
+    componentWillMount = () => {
+        setTimeout(() => {
+            if(!this.props.hasTransactions && !this.state.open) {
+                this.setState({hintOpen: true});
+            } else {
+                this.setState({hintOpen: false});
+            }
+        }, 5000)
+
     }
 
 
     componentWillReceiveProps = debounce((newProps) => {
-        console.log('componentWillReceiveProps', newProps)
         if(!newProps.hasTransactions && !this.state.open) {
             this.setState({hintOpen: true});
         } else {
             this.setState({hintOpen: false});
         }
-    });
+    }, 1000);
 
     render() {
         var css = {};
