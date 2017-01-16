@@ -5,6 +5,7 @@ import {
     TextField
 } from 'redux-form-material-ui'
 import {getScreenClass} from '../utils'
+import muiThemeable from 'material-ui/styles/muiThemeable';
 
 
 const validate = values => {
@@ -109,6 +110,7 @@ class SignupForm extends Component {
             <div style={{height: "100%"}}>
                 <RaisedButton title="Signup to sync and backup your data" secondary={true} label="Signup" onTouchTap={this.handleClose} />
                 <Dialog title="Register to sync and backup your data"
+                        titleStyle={{color: this.props.muiTheme.palette.alternateTextColor, backgroundColor: this.props.muiTheme.palette.primary1Color}}
                         className="signupForm"
                         actions={actions}
                         modal={false}
@@ -116,6 +118,7 @@ class SignupForm extends Component {
                         contentStyle={css}
                         autoScrollBodyContent={true}
                         onRequestClose={this.handleClose}>
+                    <p>1 month free trial and then just $1/month</p>
                     <form onSubmit={handleSubmit} style={{height: "100%"}}>
                         <Field
                             name="name"
@@ -155,9 +158,11 @@ class SignupForm extends Component {
         );
     }
 }
+
+
 const Signup = reduxForm({
     form: 'signup',
     validate
-})(SignupForm);
+})(muiThemeable()(SignupForm));
 
 export default Signup;

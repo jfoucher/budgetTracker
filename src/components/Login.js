@@ -5,6 +5,7 @@ import {getScreenClass} from '../utils'
 import {
     TextField
 } from 'redux-form-material-ui'
+import muiThemeable from 'material-ui/styles/muiThemeable';
 
 class LoginForm extends Component {
     static muiName = 'FlatButton';
@@ -57,6 +58,7 @@ class LoginForm extends Component {
             <div>
                 <RaisedButton primary={true} label="Login" onTouchTap={this.handleClose} />
                 <Dialog title="Login to sync"
+                        titleStyle={{color: this.props.muiTheme.palette.alternateTextColor, backgroundColor: this.props.muiTheme.palette.primary1Color}}
                         actions={actions}
                         modal={false}
                         open={this.state.open}
@@ -93,8 +95,9 @@ class LoginForm extends Component {
         );
     }
 }
+
 const Login = reduxForm({
     form: 'login'
-})(LoginForm);
+})(muiThemeable()(LoginForm));
 
 export default Login;

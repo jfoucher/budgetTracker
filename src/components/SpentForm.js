@@ -8,6 +8,7 @@ import {
     AutoComplete,
 } from 'redux-form-material-ui'
 import { grey700, orange700 } from 'material-ui/styles/colors';
+import muiThemeable from 'material-ui/styles/muiThemeable';
 
 
 const validate = values => {
@@ -92,7 +93,7 @@ class MySpentForm extends Component {
                 onTouchTap={this.handleClose}
                 />,
             <FlatButton
-                label="Submit"
+                label="Save transaction"
                 primary={true}
                 keyboardFocused={true}
                 onTouchTap={this.sendSubmit}
@@ -107,6 +108,7 @@ class MySpentForm extends Component {
         return (
         <div>
             <Dialog title="Add a transaction"
+                    titleStyle={{color: this.props.muiTheme.palette.alternateTextColor, backgroundColor: this.props.muiTheme.palette.primary1Color}}
                 actions={actions}
                 modal={false}
                 open={this.state.open}
@@ -174,9 +176,10 @@ class MySpentForm extends Component {
         );
     }
 }
+
 const SpentForm = reduxForm({
     form: 'transaction',
     validate
-})(MySpentForm);
+})(muiThemeable()(MySpentForm));
 
 export default SpentForm
