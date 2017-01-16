@@ -8,7 +8,7 @@ const getYearData = (transactions, filter) => {
 
     const thisYear = transactions.filter((transaction) => {
         const str = moment(transaction.date).format('YYYY');
-        return str === filter;
+        return str === filter && !transaction._deleted;
     });
 
     const year = Number(filter);
@@ -58,7 +58,7 @@ const getData = (transactions, filter) => {
 
     const thisMonth = transactions.filter((transaction) => {
         const str = moment(transaction.date).format('YYYYMM');
-        return str === filter;
+        return str === filter && !transaction._deleted;
     });
 
     const year = Number(filter.substr(0,4));
@@ -110,7 +110,7 @@ const getCategories = (transactions, filter) => {
     return transactions.filter((transaction) => {
         const date = moment(transaction.date);
         const str = date.format(format);
-        return str === filter
+        return str === filter && !transaction._deleted
     }).map((t) => {
         return t.category;
     }).filter((obj, pos, arr) => {

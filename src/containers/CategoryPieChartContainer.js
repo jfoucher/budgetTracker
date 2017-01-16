@@ -11,7 +11,7 @@ const getData = (transactions, filter) => {
     }
     const thisMonth = transactions.filter((transaction) => {
         const str = moment(transaction.date).format(format);
-        return str === filter;
+        return str === filter && !transaction._deleted;
     });
 
     var cats = {};
@@ -61,6 +61,7 @@ const CategoryPieChartContainer = connect(
     {
         pure: true,
         areStatesEqual: (prev, next) => {
+            console.log('prev, next', prev.transactions, next.transactions, prev.visibilityFilter, next.visibilityFilter)
             return prev.transactions === next.transactions && prev.visibilityFilter === next.visibilityFilter;
         }
     }

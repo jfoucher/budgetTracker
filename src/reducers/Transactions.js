@@ -30,21 +30,28 @@ function Transactions(state = initialState, action) {
 
 
         case t.REMOVE:
-            return state.filter(doc =>
-                doc._id !== action.data._id
-            );
+            return state.map((doc) => {
+                if (doc._id === action.data._id) {
+                    doc._deleted = true;
+                    return doc;
+                }
+                return doc;
+            });
 
 
         case t.RESTORE:
+            const filtered = state.filter((t) => {
+                return t._id !== action.data._id;
+            });
             const d = {
-                _id: action.data._id,
+                _id: guid(),
                 amount: action.data.amount,
                 date: action.data.date,
                 category: action.data.category,
                 type: 'transaction'
             };
             return [d,
-                ...state
+                ...filtered
             ];
         case t.UPDATE:
             if(state){

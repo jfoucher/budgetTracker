@@ -33,7 +33,8 @@ const store = function() {
             path: '/transactions',
             db: DB,
             changeFilter: (doc) => {
-                return !doc._deleted && doc.type && doc.type === 'transaction';
+                //return true;
+                return doc.type && doc.type === 'transaction';
             },
             actions: {
                 remove: doc => {
@@ -51,7 +52,7 @@ const store = function() {
             path: '/categories',
             db: DB,
             changeFilter: (doc) => {
-                return !doc._deleted && doc.type && doc.type === 'category' && doc.default !== true;
+                return doc.type && doc.type === 'category' && doc.default !== true;
             },
             actions: {
                 remove: doc => {

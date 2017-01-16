@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
 
     const thisMonth =  state.transactions.filter((transaction) => {
         const str = moment(transaction.date).format(format);
-        return str === state.visibilityFilter
+        return str === state.visibilityFilter && !transaction._deleted;
     });
 
     const total = thisMonth.reduce((t, tr) => {

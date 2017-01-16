@@ -14,7 +14,7 @@ const getVisibleTransactions = (transactions, filter) => {
     return transactions.filter((transaction) => {
         const date = moment(transaction.date);
         const str = date.format(format);
-        return str === filter
+        return str === filter && !transaction._deleted
     });
 
 

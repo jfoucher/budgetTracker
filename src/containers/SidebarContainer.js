@@ -9,6 +9,8 @@ const getAvailableMonths = (transactions) => {
         const date = moment(transaction.date);
 
         return date.format('YYYYMM');
+    }).filter((t) => {
+        return !t._deleted;
     });
     const months = [...new Set(dates)].sort((a, b) => {
         return parseInt(b, 10) - parseInt(a, 10);
