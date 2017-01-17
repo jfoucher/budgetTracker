@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-//import './App.css';
+import './App.css';
 import VisibleTransactionsTable from './containers/VisibleTransactionsTable';
 import SideBarContainer from './containers/SidebarContainer';
 import TitleBar from './components/TitleBar';
@@ -90,6 +90,17 @@ class App extends Component {
 
 
                     <SnackbarContainer />
+
+                    <footer>
+                        <ul>
+                            <li>
+                                <a href="mailto:jfoucher@gmail.com">Contact us</a>
+                            </li>
+                            <li style={{fontSize: "0.8em", marginTop: "1em"}}>
+                                Made by <a href="https://jfoucher.com">Jonathan Foucher</a>
+                            </li>
+                        </ul>
+                    </footer>
                 </div>
 
         );
