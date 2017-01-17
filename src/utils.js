@@ -31,23 +31,19 @@ export const  getScreenClass = ({ phone, tablet, breakpoints }) => {
     return screenClass;
 };
 
-export const getBase64Image = (url) => {
+export const getBase64Avatar = (email) => {
     return new Promise((resolve, reject) => {
-        var img = document.createElement("img");
-        img.crossOrigin = "anonymous";
-        img.onload = () => {
-            var canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0);
-            resolve(canvas.toDataURL("image/jpg"));
-        };
-        img.onerror = (e) => {
-            console.log('image failed to load', e);
-            reject(e);
-        }
-        img.src = url;
+
+       fetch('https://api.budgt.eu/avatar.php?email='+encodeURIComponent(email))
+            .then(function(response) {
+               response.json().then((r) => {
+                   resolve(r);
+                });
+            }).catch((e) => {
+                reject(e);
+                console.log('image fetch error', e);
+            });
+
     });
 }
 

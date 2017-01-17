@@ -9,7 +9,7 @@ import LoggedIn from './Logged';
 import md5 from 'md5'
 import PouchDB from 'pouchdb'
 import {DB} from '../store'
-import {getBase64Image} from '../utils'
+import {getBase64Avatar} from '../utils'
 import {Visible} from 'react-grid-system'
 
 var sync = false;
@@ -106,6 +106,8 @@ class UserButtons extends Component {
         const remoteDB = new PouchDB('https://api.budgt.eu/u-'+md5(username), {skip_setup:true, ajax: {cache: false}});
         this.setState({remoteDB: remoteDB});
         var loginPromise = remoteDB.login(username, a.password, ajaxOpts);
+
+
         const loginDone = new Promise((resolve, reject) => {
             loginPromise.then(function (loginResult) {
                 console.log('successful login', loginResult);
@@ -113,17 +115,15 @@ class UserButtons extends Component {
                     console.log('got remote user', u);
                     console.log('got remote user', username);
 
-
-                    const url = 'https://www.gravatar.com/avatar/'+md5(u.name.toLowerCase())+'.jpg?s=120';
                     DB.get('currentUser').then((currentUser) => {
                         console.log('got local currentUser', currentUser);
                         //Remote db is source of truth for user data, update local user
                         if(u.name !== currentUser.email || !currentUser.avatar) {
                             //Email changed, get avatar
                             console.log('Unknown user logging in, update avatar');
-                            getBase64Image(url).then((r) => {
+                            getBase64Avatar(u.name.toLowerCase()).then((r) => {
                                 console.log('got gravatar image', r);
-                                currentUser.avatar = r;
+                                currentUser.avatar = r.result;
                             }).catch((e) => {
                                 console.log('avatar image failed to load, proceed', e);
 
@@ -174,9 +174,9 @@ class UserButtons extends Component {
                             username: username
                         };
 
-                        getBase64Image(url).then((r) => {
+                        getBase64Avatar(a.email.toLowerCase()).then((r) => {
                             console.log('got gravatar image', r);
-                            currentUser.avatar = r;
+                            currentUser.avatar = r.result;
                         }).catch((e) => {
                             console.log('avatar image failed to load, proceed', e);
                         }).then((r) => {
@@ -347,6 +347,7 @@ class UserButtons extends Component {
 
         this.state.remoteDB.logout().then(()=>{
             //console.log('logged out from db');
+            document.cookie = 'AuthSession=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             this.state.remoteDB.close();
             this.setState({remoteDB: false});
         }).catch((e) => {
