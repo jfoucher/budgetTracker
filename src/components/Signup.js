@@ -50,14 +50,9 @@ class SignupForm extends Component {
         }
 
         signup.then((u) => {
-            if(window.ga) {
-                ga('send', 'event', 'user', 'signup', 'signup_success');
-            }
 
         }).catch((e) => {
-            if(window.ga) {
-                ga('send', 'event', 'user', 'signup', 'signup_fail');
-            }
+
         }).then(()=>{
             this.setState({
                 open: false
