@@ -1,1 +1,4 @@
-A Budget tracker built with react and pouchdb
+My first React project, built to learn the technology.
+
+An offline capable spending tracker.
+
