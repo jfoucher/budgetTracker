@@ -41,7 +41,7 @@ export const getBase64Avatar = (email) => {
                 });
             }).catch((e) => {
                 reject(e);
-                console.log('image fetch error', e);
+                //console.log('image fetch error', e);
             });
 
     });

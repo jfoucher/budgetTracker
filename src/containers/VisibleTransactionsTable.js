@@ -35,7 +35,7 @@ const mapDispatchToProps = (dispatch) => {
                 message: 'Transaction deleted',
                 actionLabel: 'Undo',
                 onActionTouchTap: () => {
-                    console.log('clicked undo', transaction);
+                    //console.log('clicked undo', transaction);
                     dispatch({type: RESTORE, data: transaction});
                     dispatch(showSnackbar({open: false, message:''}));
                 }

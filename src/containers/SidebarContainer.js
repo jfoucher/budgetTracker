@@ -60,7 +60,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         displayYear: (year, event) => {
-            console.log('displayYear', year, event);
+            //console.log('displayYear', year, event);
             dispatch(setVisibilityFilter(year));
             ownProps.onClickClose();
         }

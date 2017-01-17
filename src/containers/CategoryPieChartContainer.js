@@ -61,7 +61,7 @@ const CategoryPieChartContainer = connect(
     {
         pure: true,
         areStatesEqual: (prev, next) => {
-            console.log('prev, next', prev.transactions, next.transactions, prev.visibilityFilter, next.visibilityFilter)
+            //console.log('prev, next', prev.transactions, next.transactions, prev.visibilityFilter, next.visibilityFilter)
             return prev.transactions === next.transactions && prev.visibilityFilter === next.visibilityFilter;
         }
     }

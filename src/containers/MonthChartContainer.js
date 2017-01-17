@@ -47,10 +47,10 @@ const getYearData = (transactions, filter) => {
 
 
 const getData = (transactions, filter) => {
-    console.log('filter', filter, filter.length);
+    //console.log('filter', filter, filter.length);
     if(filter.length === 4) { //If we want to get data for the whole year
         //Get monthly data for the whole year
-        console.log('getting data for the whole year')
+        //console.log('getting data for the whole year')
         return getYearData(transactions, filter)
     }
 
@@ -119,7 +119,7 @@ const getCategories = (transactions, filter) => {
 }
 
 const mapStateToProps = (state) => {
-    console.log('state.visibilityFilter', state.visibilityFilter);
+    //console.log('state.visibilityFilter', state.visibilityFilter);
     return {
         data: getData(state.transactions, state.visibilityFilter),
         categories: getCategories(state.transactions, state.visibilityFilter),
