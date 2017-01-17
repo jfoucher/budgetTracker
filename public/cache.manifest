@@ -1,11 +1,11 @@
 CACHE MANIFEST
-#version 0.1.2
+#version 0.1.3
 CACHE:
 /index.html
 /static/css/main.6bb67f7.css
 /static/css/main.6bb67f7.css.map
-/static/js/main.efb53b42.js
-/static/js/main.efb53b42.js.map
+/static/js/main.4fbfdc2f.js
+/static/js/main.4fbfdc2f.js.map
 /logo.png
 /favicon.ico
 /320x460.png
