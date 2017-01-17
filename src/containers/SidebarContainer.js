@@ -37,6 +37,9 @@ const getAvailableMonths = (transactions) => {
 const getNumberOfTransactionsByMonth = (transactions) => {
     var transactionsPerMonth = {};
     for(var i = 0; i < transactions.length;i++) {
+        if(transactions[i]._deleted) {
+            continue;
+        }
         const date = moment(transactions[i].date);
         const d = date.format('YYYYMM');
         if(typeof transactionsPerMonth[d] === "undefined") {
