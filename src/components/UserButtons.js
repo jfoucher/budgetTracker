@@ -244,6 +244,11 @@ class UserButtons extends Component {
         });
 
 
+
+
+
+
+
         const signupDone =  new Promise((resolve, reject) => {
             signupPromise.then((r) => {
 
@@ -257,42 +262,50 @@ class UserButtons extends Component {
 
                     //Then create local user with same data in "data" field
                     //and loggedIn field to true
-
-                    DB.put({
+                    const newUser = {
                         _id: 'currentUser',
                         loggedIn: true,
                         fullname: a.name,
                         email: a.email,
                         username: username,
                         avatar: ''
-                    }).then(()=>{
-                        //login
-                        //console.log('sucessfully created local user')
-                        this.submitLogin(a).then((u) => {
-                            //console.log('sucessfully logged in')
-                            //Get remote user
-                            remoteDB.getUser(username).then((u) => {
-                                //console.log('got remote user', u);
-
-                                resolve(u);
-
-                            }).catch((e) => {
-                                reject({message: 'Could not get remote user', error: e});
-                                //console.log('could not get remote user', e);
-                            });
-
-                        }).catch((e) => {
-                            reject({message: 'Could not log you in.', error: e});
-                        });
-                    }).catch((e) => {
-                        if(e.status === 409) {
-                            reject({message: 'You already have an account on this machine, try logging in with it.', error: e, link:{"label": 'more info', url:"https://budgt.eu/"}});
-                        } else {
-                            reject({message: 'Could not create your account, sorry. Contact us if this error persists', error: e});
-                        }
-
-                        //console.log('Could not create local user', e);
+                    };
+                    DB.get('currentUser').then((r) => {
+                        newUser._rev = r._rev;
                     })
+                        .catch(() => {})
+                        .then(() => {
+                            DB.put(newUser).then(()=>{
+                                //login
+                                //console.log('sucessfully created local user')
+                                this.submitLogin(a).then((u) => {
+                                    //console.log('sucessfully logged in')
+                                    //Get remote user
+                                    remoteDB.getUser(username).then((u) => {
+                                        //console.log('got remote user', u);
+
+                                        resolve(u);
+
+                                    }).catch((e) => {
+                                        reject({message: 'Could not get remote user', error: e});
+                                        //console.log('could not get remote user', e);
+                                    });
+
+                                }).catch((e) => {
+                                    reject({message: 'Could not log you in.', error: e});
+                                });
+                            }).catch((e) => {
+                                if(e.status === 409) {
+                                    reject({message: 'You already have an account on this machine, try logging in with it.', error: e, link:{"label": 'more info', url:"https://budgt.eu/"}});
+                                } else {
+                                    reject({message: 'Could not create your account, sorry. Contact us if this error persists', error: e});
+                                }
+
+                                //console.log('Could not create local user', e);
+                            })
+
+                        })
+
 
 
                 }).catch((e) => {
