@@ -245,10 +245,6 @@ class UserButtons extends Component {
 
 
 
-
-
-
-
         const signupDone =  new Promise((resolve, reject) => {
             signupPromise.then((r) => {
 
@@ -348,24 +344,24 @@ class UserButtons extends Component {
         DB.get('currentUser').then((user) => {
             user.loggedIn = false;
             DB.put(user).then(() => {
-                this.props.showSnackbar({
-                    message: 'Successfully logged out',
-                    open: true
-                });
+                this.state.remoteDB.logout().then(()=>{
+                    //console.log('logged out from db');
+                    document.cookie = 'AuthSession=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+                    this.props.showSnackbar({
+                        message: 'Successfully logged out',
+                        open: true
+                    });
+                    this.setState({remoteDB: false, user: false});
+                    this.state.remoteDB.close();
+                }).catch((e) => {
+                    //console.log('could not logout', e)
+                })
             });
-            this.setState({user:false});
         }).catch((e) => {
             //console.log('could not update local user in logout')
         });
 
-        this.state.remoteDB.logout().then(()=>{
-            //console.log('logged out from db');
-            document.cookie = 'AuthSession=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            this.state.remoteDB.close();
-            this.setState({remoteDB: false});
-        }).catch((e) => {
-            //console.log('could not logout', e)
-        })
+
     }
 
     render() {
