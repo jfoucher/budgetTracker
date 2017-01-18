@@ -31,7 +31,7 @@ class SideBar extends Component {
 
         })
         return (
-            <Drawer open={this.props.open}>
+            <Drawer open={this.props.open} docked={false} onRequestChange = {onClickClose}>
                 <AppBar
                     zDepth={1}
                     title="Menu"
