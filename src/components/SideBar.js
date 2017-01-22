@@ -16,7 +16,11 @@ class SideBar extends Component {
         const menuItems = months.map((y, i) => {
 
             const subitems = y.map((m) =>{
-                return <FilterSidebarMenuItem key={'m-'+m} month={m} numberOfTransactions={this.props.transactionsPerMonth[m]} filter={m} clickClose={onClickClose}/>
+                if(this.props.transactionsPerMonth[m]) {
+                    return <FilterSidebarMenuItem key={'m-'+m} month={m}
+                                                  numberOfTransactions={this.props.transactionsPerMonth[m]} filter={m}
+                                                  clickClose={onClickClose}/>
+                }
             }) ;
             const year = moment(y[0], 'YYYYMM').format('YYYY');
             return <ListItem

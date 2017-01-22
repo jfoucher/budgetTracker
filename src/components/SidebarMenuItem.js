@@ -5,9 +5,9 @@ import ActionInfo from 'material-ui/svg-icons/action/info';
 
 const SidebarMenuItem = ({ month, onClick, clickClose, numberOfTransactions }) => {
     const date = moment(month, "YYYYMM");
-
+    const tr = numberOfTransactions ? (numberOfTransactions + " transaction"+(numberOfTransactions>1 ? 's' : '')) : 'No transactions';
     return (
-        <ListItem onTouchTap={onClick} primaryText={date.format('MMM YYYY')} secondaryText={<div style={{fontWeight: 300}}>{numberOfTransactions + " transaction"+(numberOfTransactions>1 ? 's' : '')}</div>} />
+        <ListItem onTouchTap={onClick} primaryText={date.format('MMM YYYY')} secondaryText={<div style={{fontWeight: 300}}>{tr}</div>} />
     )
 }
 
