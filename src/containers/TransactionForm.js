@@ -66,8 +66,9 @@ const mapDispatchToProps = (dispatch) => {
             const transaction = {
                 amount: parseFloat(data.amount),
                 date: data.date.toISOString(),
+                name: data.name,
                 category: category,
-            }
+            };
 
             dispatch(reset('transaction'));
             dispatch(addTransaction(transaction));

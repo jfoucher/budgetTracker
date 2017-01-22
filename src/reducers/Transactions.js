@@ -17,6 +17,7 @@ function Transactions(state = initialState, action) {
                 _id: action.data._id || guid(),
                 amount: action.data.amount,
                 date: action.data.date,
+                name: action.data.name,
                 category: action.data.category,
                 type: 'transaction'
             }
@@ -47,6 +48,7 @@ function Transactions(state = initialState, action) {
                 _id: guid(),
                 amount: action.data.amount,
                 date: action.data.date,
+                name: action.data.name,
                 category: action.data.category,
                 type: 'transaction'
             };

@@ -125,6 +125,15 @@ class MySpentForm extends Component {
                         floatingLabelText="Transaction Amount"
                         onChange={() => {}}
                         />
+                    <Divider />
+                    <Field
+                        name="name"
+                        component={TextField}
+                        underlineShow={false}
+                        hintText="Transaction Item"
+                        floatingLabelText="Transaction Item"
+                        onChange={() => {}}
+                        />
 
                     <Divider />
                     <Field
