@@ -13,7 +13,7 @@ class TitleH2 extends Component {
     }
 
     componentWillReceiveProps = debounce((newProps) => {
-        this.setState({info: newProps.numTransactions + ' transactions for a total of ' + newProps.total});
+        this.setState({info: newProps.numTransactions + ' transactions for a total of ' + newProps.total.toFixed(2)});
     });
 
     render() {
