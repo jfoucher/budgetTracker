@@ -237,9 +237,17 @@ class UserButtons extends Component {
         //Set up remote database
         const remoteDB = new PouchDB('https://api.budgt.eu/u-'+md5(username), {skip_setup:true, ajax: {cache: false}});
         //Create new user in _users table on remote database
+        var OSName="Unknown OS";
+        if (navigator.appVersion.indexOf("Win")!=-1) OSName="Windows";
+        if (navigator.appVersion.indexOf("Mac")!=-1) OSName="MacOS";
+        if (navigator.appVersion.indexOf("X11")!=-1) OSName="UNIX";
+        if (navigator.appVersion.indexOf("Linux")!=-1) OSName="Linux";
         var signupPromise = remoteDB.signup(username, a.password, {
             metadata: {
-                fullname: a.name
+                fullname: a.name,
+                source: 'web',
+                created_at: new Date(),
+                platform: OSName
             }
         });
 
